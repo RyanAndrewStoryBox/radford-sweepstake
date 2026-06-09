@@ -144,15 +144,48 @@
 
   /* ── LEADERBOARD ── */
   .leaderboard-section{margin-top:0}
-  .leaderboard-placeholder{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:40px 24px;text-align:center}
-  .lb-icon{font-size:48px;margin-bottom:16px}
-  .lb-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:var(--gold);margin-bottom:8px}
-  .lb-sub{color:var(--muted);font-size:14px;line-height:1.6;max-width:480px;margin:0 auto 20px}
-  .lb-status-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:480px;margin:0 auto}
-  @media(max-width:400px){.lb-status-grid{grid-template-columns:1fr}}
-  .lb-status-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center}
-  .lb-status-label{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;color:var(--muted);margin-bottom:6px}
-  .lb-status-val{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--silver)}
+  .lb-loading{text-align:center;padding:40px;color:var(--muted);font-size:14px}
+  .lb-updated{font-size:11px;color:var(--muted);text-align:right;margin-bottom:16px;letter-spacing:0.3px}
+  .lb-tabs{display:flex;gap:8px;margin-bottom:24px}
+  .lb-tab{background:var(--surface2);border:1px solid var(--border);color:var(--silver);font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;padding:8px 18px;border-radius:4px;cursor:pointer;transition:all 0.2s}
+  .lb-tab.active,.lb-tab:hover{background:var(--gold);color:#0a0e1a;border-color:var(--gold)}
+
+  /* Country standings table */
+  .lb-player-grid{display:grid;grid-template-columns:1fr;gap:12px}
+  @media(min-width:640px){.lb-player-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:900px){.lb-player-grid{grid-template-columns:repeat(3,1fr)}}
+  .lb-player-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px}
+  .lb-player-name{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;color:var(--text);border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:10px}
+  .lb-team-row{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:12px;border-bottom:1px solid rgba(42,53,80,0.3)}
+  .lb-team-row:last-child{border-bottom:none}
+  .lb-team-flag{width:20px;height:13px;object-fit:cover;border-radius:2px;flex-shrink:0;border:1px solid rgba(255,255,255,0.1)}
+  .lb-team-name{flex:1;color:var(--silver);font-weight:500}
+  .lb-team-status{font-size:10px;font-weight:600;letter-spacing:0.5px;white-space:nowrap}
+  .lb-team-status.still-in{color:var(--s2)}
+  .lb-team-status.eliminated{color:var(--muted)}
+  .lb-team-status.winner{color:var(--gold)}
+  .lb-team-status.runner-up{color:var(--silver)}
+  .lb-group-pos{font-size:10px;color:var(--muted);min-width:24px;text-align:right}
+
+  /* Golden boot table */
+  .gb-horse-race{display:flex;flex-direction:column;gap:6px}
+  .gb-contender-row{display:grid;grid-template-columns:auto 1fr auto auto;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;transition:border-color 0.2s}
+  .gb-contender-row.highlighted{border-color:rgba(245,200,66,0.4);background:rgba(245,200,66,0.04)}
+  .gb-contender-row.leader{border-color:var(--gold);background:rgba(245,200,66,0.08)}
+  .gb-contender-flag{width:24px;height:16px;object-fit:cover;border-radius:2px;border:1px solid rgba(255,255,255,0.12)}
+  .gb-contender-info{min-width:0}
+  .gb-contender-name{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .gb-contender-country{font-size:10px;color:var(--muted)}
+  .gb-contender-owner{font-size:10px;color:var(--accent);font-style:italic}
+  .gb-goals{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);min-width:32px;text-align:right}
+  .gb-goals-label{font-size:9px;color:var(--muted);letter-spacing:1px;text-align:right}
+  .gb-rank{font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--muted);min-width:20px}
+  .gb-rank.top{color:var(--gold)}
+
+  .lb-placeholder{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:40px 24px;text-align:center}
+  .lb-placeholder-icon{font-size:48px;margin-bottom:16px}
+  .lb-placeholder-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:var(--gold);margin-bottom:8px}
+  .lb-placeholder-sub{color:var(--muted);font-size:14px;line-height:1.6;max-width:480px;margin:0 auto}
 
   /* ── FIXTURES ── */
   .fixtures-section{margin-top:0}
@@ -356,20 +389,8 @@
   <div id="leaderboard" class="leaderboard-section">
     <div class="section-title">📊 LEADERBOARD</div>
     <p class="section-sub">Live standings updated daily from the tournament · Powered by football-data.org</p>
-    <div class="leaderboard-placeholder" id="leaderboardContent">
-      <div class="lb-icon">🏟️</div>
-      <div class="lb-title">Tournament Begins 11 June</div>
-      <p class="lb-sub">The leaderboard will go live once the World Cup kicks off. Country standings and Golden Boot scores will update automatically each day.</p>
-      <div class="lb-status-grid">
-        <div class="lb-status-card">
-          <div class="lb-status-label">COUNTRY TRACKER</div>
-          <div class="lb-status-val">Coming Soon</div>
-        </div>
-        <div class="lb-status-card">
-          <div class="lb-status-label">GOLDEN BOOT</div>
-          <div class="lb-status-val">Coming Soon</div>
-        </div>
-      </div>
+    <div id="leaderboardContent">
+      <div class="lb-loading">Loading leaderboard data...</div>
     </div>
   </div>
 
@@ -1100,11 +1121,212 @@ function launchConfetti(){
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
+
+// ── LEADERBOARD ───────────────────────────────────────────────────────────────
+let _lbStandings = null;
+let _lbScorers = null;
+let _lbTab = 'countries';
+
+async function loadLeaderboard(){
+  const el = document.getElementById('leaderboardContent');
+  if(!el) return;
+
+  try{
+    // Fetch standings and scorers from Supabase
+    const [sRes, scRes] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/standings?id=eq.wc2026&select=data`, {
+        headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+      }),
+      fetch(`${SUPABASE_URL}/rest/v1/scorers?id=eq.wc2026&select=data`, {
+        headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+      })
+    ]);
+
+    const sRows  = sRes.ok  ? await sRes.json()  : [];
+    const scRows = scRes.ok ? await scRes.json() : [];
+
+    _lbStandings = sRows.length  ? sRows[0].data  : null;
+    _lbScorers   = scRows.length ? scRows[0].data : null;
+
+    if(!_lbStandings && !_lbScorers){
+      el.innerHTML = `<div class="lb-placeholder">
+        <div class="lb-placeholder-icon">🏟️</div>
+        <div class="lb-placeholder-title">Tournament Begins 11 June</div>
+        <p class="lb-placeholder-sub">The leaderboard will go live once the World Cup kicks off. Country standings and Golden Boot scores update automatically every 2 hours.</p>
+      </div>`;
+      return;
+    }
+
+    renderLeaderboard();
+
+  } catch(e){
+    console.log('Leaderboard load failed:', e.message);
+    el.innerHTML = `<div class="lb-placeholder"><p class="lb-placeholder-sub">Unable to load leaderboard data.</p></div>`;
+  }
+}
+
+function renderLeaderboard(){
+  const el = document.getElementById('leaderboardContent');
+  if(!el) return;
+
+  const updatedAt = _lbStandings?.updatedAt || _lbScorers?.updatedAt || '';
+  const updatedStr = updatedAt ? 'Last updated: ' + new Date(updatedAt).toLocaleString('en-GB', {day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : '';
+
+  let html = `<div class="lb-tabs">
+    <button class="lb-tab ${_lbTab==='countries'?'active':''}" onclick="setLbTab('countries')">⚽ COUNTRY TRACKER</button>
+    <button class="lb-tab ${_lbTab==='boot'?'active':''}" onclick="setLbTab('boot')">🥅 GOLDEN BOOT</button>
+  </div>`;
+
+  if(updatedStr) html += `<div class="lb-updated">${updatedStr}</div>`;
+
+  if(_lbTab === 'countries'){
+    html += renderCountryTracker();
+  } else {
+    html += renderGoldenBoot();
+  }
+
+  el.innerHTML = html;
+}
+
+function setLbTab(tab){
+  _lbTab = tab;
+  renderLeaderboard();
+}
+window.setLbTab = setLbTab;
+
+function renderCountryTracker(){
+  // Build a lookup: team name (lowercase) -> group standing row
+  const teamLookup = {};
+  if(_lbStandings?.groups){
+    _lbStandings.groups.forEach(group => {
+      if(!group.table) return;
+      group.table.forEach((row, idx) => {
+        const name = row.team?.name?.toLowerCase() || '';
+        const shortName = row.team?.shortName?.toLowerCase() || '';
+        teamLookup[name] = { ...row, groupPos: idx+1, groupName: group.group };
+        if(shortName) teamLookup[shortName] = { ...row, groupPos: idx+1, groupName: group.group };
+      });
+    });
+  }
+
+  const knockout = _lbStandings?.knockoutProgress || {};
+
+  // Get draw data to know which teams each player has
+  if(!_swPlayers || _swPlayers.length === 0){
+    return '<p style="color:var(--muted);font-size:13px;text-align:center;padding:20px">Draw results not yet available.</p>';
+  }
+
+  let html = '<div class="lb-player-grid">';
+
+  _swPlayers.forEach(player => {
+    if(!player) return;
+    const cat = player.name === 'Echo' ? ' 🐈' : player.name === 'Espresso' ? ' 🐈‍⬛' : '';
+    html += `<div class="lb-player-card"><div class="lb-player-name">${esc(player.name)}${cat}</div>`;
+
+    player.slots.forEach(slot => {
+      const teamName = slot.name;
+      const code = slot.code;
+      const teamKey = teamName.toLowerCase();
+
+      // Check knockout status first
+      const knockoutStatus = knockout[teamName] || knockout[Object.keys(knockout).find(k => k.toLowerCase() === teamKey)];
+
+      let statusHtml = '';
+      let statusClass = 'still-in';
+      let statusText = '';
+
+      if(knockoutStatus?.eliminatedAt){
+        statusText = `Out · ${knockoutStatus.eliminatedAt}`;
+        statusClass = 'eliminated';
+      } else if(knockoutStatus?.reached === 'Final'){
+        // Check if they won
+        const wonFinal = Object.entries(knockout).find(([k,v]) => k.toLowerCase() === teamKey && v.reached === 'Final' && !v.eliminatedAt);
+        statusText = '🏆 WINNER';
+        statusClass = 'winner';
+      } else if(knockoutStatus?.reached){
+        statusText = `✅ ${knockoutStatus.reached}`;
+        statusClass = 'still-in';
+      } else {
+        // Group stage — show position
+        const standing = teamLookup[teamKey];
+        if(standing){
+          const pos = standing.groupPos;
+          const pts = standing.points;
+          const gd = standing.goalDifference >= 0 ? '+'+standing.goalDifference : standing.goalDifference;
+          statusText = `${standing.groupName} · P${pos} · ${pts}pts · GD${gd}`;
+          statusClass = pos <= 2 ? 'still-in' : 'eliminated';
+        } else {
+          statusText = 'Group stage';
+          statusClass = 'still-in';
+        }
+      }
+
+      html += `<div class="lb-team-row">
+        <img class="lb-team-flag" src="${furl(code)}" alt="" onerror="this.style.display='none'">
+        <span class="lb-team-name">${esc(teamName)}</span>
+        <span class="lb-team-status ${statusClass}">${statusText}</span>
+      </div>`;
+    });
+
+    html += '</div>';
+  });
+
+  html += '</div>';
+  return html;
+}
+
+function renderGoldenBoot(){
+  if(!_lbScorers?.scorers || _lbScorers.scorers.length === 0){
+    return '<p style="color:var(--muted);font-size:13px;text-align:center;padding:20px">Scorer data not yet available.</p>';
+  }
+
+  // Build lookup of who owns each player
+  const ownerLookup = {}; // playerName (lowercase) -> participant name
+  if(_gbPlayers && _gbPlayers.length > 0){
+    _gbPlayers.forEach(player => {
+      if(!player) return;
+      player.slots.forEach(slot => {
+        ownerLookup[slot.name.toLowerCase()] = player.name;
+      });
+    });
+  }
+
+  const scorers = _lbScorers.scorers.slice(0, 48); // top 48
+  let html = '<div class="gb-horse-race">';
+
+  scorers.forEach((scorer, idx) => {
+    const name = scorer.player?.name || scorer.name || 'Unknown';
+    const goals = scorer.goals || 0;
+    const country = scorer.team?.name || '';
+    const nameKey = name.toLowerCase();
+    const owner = ownerLookup[nameKey] || Object.entries(ownerLookup).find(([k]) => nameKey.includes(k.split(' ')[1]?.toLowerCase()||''))?.[1] || null;
+    const isHighlighted = !!owner;
+    const isLeader = idx === 0 && goals > 0;
+
+    html += `<div class="gb-contender-row ${isLeader?'leader':isHighlighted?'highlighted':''}">
+      <span class="gb-rank ${idx<3?'top'}">${idx+1}</span>
+      <div class="gb-contender-info">
+        <div class="gb-contender-name">${esc(name)}</div>
+        <div class="gb-contender-country">${esc(country)}</div>
+        ${owner ? `<div class="gb-contender-owner">→ ${esc(owner)}</div>` : ''}
+      </div>
+      <div>
+        <div class="gb-goals">${goals}</div>
+        <div class="gb-goals-label">GOALS</div>
+      </div>
+    </div>`;
+  });
+
+  html += '</div>';
+  return html;
+}
+
 window.addEventListener('DOMContentLoaded',function(){
   initPusher();
   const _params=new URLSearchParams(window.location.search);
   if(!_params.get('draw')&&!_params.get('gb')&&!isHost) checkSavedDraws();
 
+  loadLeaderboard();
   buildSeedsGrid('seedsGridPreview',SEEDS,false);
   buildSeedsGrid('gbTiersGridPreview',GB_TIERS,true);
   buildParticipantsDisplay();
