@@ -217,7 +217,7 @@
   /* ── FOOTER ── */
   .site-footer{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:28px 24px 20px;border-top:1px solid var(--border);margin-top:60px}
   .footer-logo-wrap{flex-shrink:0}
-  .footer-logo{height:22px;opacity:0.55;transition:opacity 0.2s}
+  .footer-logo{height:22px;opacity:0.7;transition:opacity 0.2s;mix-blend-mode:screen}
   .footer-logo:hover{opacity:0.85}
   .footer-text{font-size:11px;color:var(--muted);letter-spacing:0.5px}
   .footer-text a{color:var(--muted);text-decoration:none;transition:color 0.2s}
@@ -255,7 +255,7 @@
     <div class="badge">FIFA ⚽ 2026</div>
     <h1>THE RADFORD<br><span>WORLD CUP SWEEPSTAKE</span></h1>
     <p class="treasurer">Treasurer: Thea</p>
-    <p class="draw-time">⏰ Live draw begins <strong>5:00 PM BST</strong> · Thursday 11 June</p>
+    <p class="draw-time">⏰ Live draw begins <strong>6:30 PM BST</strong> · Thursday 11 June</p>
     <p class="subtitle">12 players &nbsp;·&nbsp; 4 teams each &nbsp;·&nbsp; 4 Golden Boot contenders each &nbsp;·&nbsp; 48 teams</p>
     <div class="prize-grid">
       <div class="prize-card">
@@ -301,7 +301,7 @@
     <div class="divider"></div>
     <div class="waiting-box">
       <div class="waiting-title">⚽ Waiting for the draw to begin...</div>
-      <p class="waiting-sub">The host will start the live draw at 5:00 PM BST · Thursday 11 June</p>
+      <p class="waiting-sub">The host will start the live draw at 6:30 PM BST · Thursday 11 June</p>
       <div><span class="pulse"></span><span class="pulse"></span><span class="pulse"></span></div>
     </div>
     <div class="divider"></div>
@@ -1304,7 +1304,7 @@ function renderGoldenBoot(){
     const isLeader = idx === 0 && goals > 0;
 
     html += `<div class="gb-contender-row ${isLeader?'leader':isHighlighted?'highlighted':''}">
-      <span class="gb-rank ${idx<3?'top'}">${idx+1}</span>
+      <span class="gb-rank" style="${idx<3?'color:var(--gold)':''}">${idx+1}</span>
       <div class="gb-contender-info">
         <div class="gb-contender-name">${esc(name)}</div>
         <div class="gb-contender-country">${esc(country)}</div>
