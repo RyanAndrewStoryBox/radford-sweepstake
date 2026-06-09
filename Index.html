@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Radford World Cup Sweepstake 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0a0e1a; --surface:#111827; --surface2:#1c2538; --border:#2a3550;
+    --gold:#f5c842; --gold2:#e8a820; --silver:#c8d4e8; --text:#e8edf5; --muted:#8896b3;
+    --s1:#f5c842; --s2:#4ade80; --s3:#60a5fa; --s4:#fb923c;
+    --danger:#e05252; --accent:#a78bfa;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 10%,rgba(245,200,66,0.08) 0%,transparent 50%),radial-gradient(ellipse at 80% 90%,rgba(96,165,250,0.07) 0%,transparent 50%),radial-gradient(ellipse at 50% 50%,rgba(167,139,250,0.04) 0%,transparent 70%);pointer-events:none;z-index:0}
+  .container{max-width:1000px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
+
+  /* ── NAV ANCHORS ── */
+  .page-nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:40px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:10px}
+  .page-nav a{color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;text-decoration:none;padding:6px 12px;border-radius:4px;border:1px solid transparent;transition:all 0.2s}
+  .page-nav a:hover{border-color:var(--gold);background:rgba(245,200,66,0.08)}
+
+  /* ── HEADER ── */
+  header{text-align:center;margin-bottom:48px}
+  .badge{display:inline-block;background:var(--gold);color:#0a0e1a;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;padding:4px 14px;border-radius:2px;margin-bottom:16px}
+  h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,8vw,80px);letter-spacing:2px;line-height:0.92;color:var(--text);margin-bottom:16px}
+  h1 span{color:var(--gold)}
+  .treasurer{color:var(--muted);font-size:13px;margin-bottom:8px}
+  .draw-time{color:var(--text);font-size:15px;font-weight:500;margin-bottom:8px}
+  .draw-time strong{color:var(--gold)}
+  .subtitle{color:var(--muted);font-size:14px;font-weight:300;margin-bottom:28px}
+  .prize-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:500px;margin:0 auto}
+  @media(max-width:400px){.prize-grid{grid-template-columns:1fr}}
+  .prize-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;text-align:center;border-top:3px solid var(--gold)}
+  .prize-icon{font-size:30px;margin-bottom:8px}
+  .prize-label{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:3px;color:var(--gold);margin-bottom:14px}
+  .prize-split{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+  .prize-item{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .prize-pos{font-size:10px;letter-spacing:2px;color:var(--muted);font-weight:600}
+  .prize-amt{font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--text);letter-spacing:1px}
+  .prize-divider{height:1px;background:var(--border)}
+  .prize-note{font-size:11px;color:var(--muted);letter-spacing:0.3px}
+
+  /* ── LAYOUT ── */
+  .divider{height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);margin:40px 0}
+  .section-label{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:4px;color:var(--muted);margin-bottom:16px}
+  .section-title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:2px;color:var(--gold);margin-bottom:8px}
+  .section-sub{color:var(--muted);font-size:13px;margin-bottom:22px;line-height:1.5}
+
+  /* ── PARTICIPANTS ── */
+  .participants-display{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:8px}
+  .participant-chip{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px;color:var(--text);display:flex;align-items:center;gap:8px;transition:border-color 0.2s}
+  .participant-chip:hover{border-color:var(--gold)}
+  .participant-chip-num{color:var(--muted);font-size:12px}
+
+  /* ── WAITING ── */
+  .waiting-box{text-align:center;padding:40px 20px}
+  .waiting-title{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:2px;color:var(--gold);margin-bottom:12px}
+  .waiting-sub{color:var(--silver);font-size:15px;margin-bottom:24px}
+  .pulse{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--gold);animation:pulse 1.4s ease-in-out infinite;margin:0 4px}
+  .pulse:nth-child(2){animation-delay:0.2s}.pulse:nth-child(3){animation-delay:0.4s}
+  @keyframes pulse{0%,80%,100%{transform:scale(0);opacity:0.3}40%{transform:scale(1);opacity:1}}
+
+  /* ── HOST PANEL ── */
+  #hostPanel{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:8px;padding:20px;margin-bottom:28px}
+  .host-title{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--gold);margin-bottom:12px}
+  .host-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+  .host-input{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 14px;border-radius:6px;outline:none;flex:1;min-width:160px}
+  .host-input:focus{border-color:var(--gold)}
+  .host-input::placeholder{color:var(--muted)}
+  .btn-host{background:var(--gold);color:#0a0e1a;border:none;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;padding:11px 18px;border-radius:6px;cursor:pointer;transition:background 0.2s;white-space:nowrap}
+  .btn-host:hover{background:var(--gold2)}
+  .btn-host:disabled{background:var(--border);color:var(--muted);cursor:not-allowed}
+  .btn-host.secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
+  .btn-host.secondary:hover{border-color:var(--silver)}
+  .host-err{color:var(--danger);font-size:12px;margin-top:6px;min-height:18px}
+
+  /* ── HOST SETUP ── */
+  .participants-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:32px}
+  .participant-input-wrap{position:relative}
+  .participant-num{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--muted);pointer-events:none}
+  .participant-input{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:12px 12px 12px 32px;border-radius:6px;outline:none;transition:border-color 0.2s}
+  .participant-input:focus{border-color:var(--gold)}
+
+  /* ── SEEDS / TIERS ── */
+  .methodology-note{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:6px;padding:14px 18px;margin-bottom:22px;font-size:13px;color:var(--silver);line-height:1.7}
+  .methodology-note strong{color:var(--gold)}
+  .seeds-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:32px}
+  @media(max-width:500px){.seeds-grid{grid-template-columns:1fr}}
+  .seed-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;border-top:3px solid}
+  .seed-card.s1{border-top-color:var(--s1)}.seed-card.s2{border-top-color:var(--s2)}
+  .seed-card.s3{border-top-color:var(--s3)}.seed-card.s4{border-top-color:var(--s4)}
+  .seed-title{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;margin-bottom:2px}
+  .seed-card.s1 .seed-title{color:var(--s1)}.seed-card.s2 .seed-title{color:var(--s2)}
+  .seed-card.s3 .seed-title{color:var(--s3)}.seed-card.s4 .seed-title{color:var(--s4)}
+  .seed-desc{font-size:10px;color:var(--muted);margin-bottom:12px;letter-spacing:0.5px}
+  .seed-teams{list-style:none;font-size:12px;color:var(--silver)}
+  .seed-teams li{display:flex;align-items:center;gap:7px;padding:3px 0;border-bottom:1px solid rgba(42,53,80,0.4)}
+  .seed-teams li:last-child{border-bottom:none}
+  .flag-sm{width:22px;height:14px;object-fit:cover;border-radius:2px;flex-shrink:0;border:1px solid rgba(255,255,255,0.12)}
+  .gb-odds{margin-left:auto;font-size:10px;color:var(--accent);flex-shrink:0;padding-left:6px;white-space:nowrap;font-weight:600}
+  .gb-country{font-size:10px;color:var(--muted)}
+
+  /* ── RESULTS ── */
+  .results-block{display:none}
+  .results-header{text-align:center;margin-bottom:32px}
+  .results-title{font-family:'Bebas Neue',sans-serif;font-size:52px;letter-spacing:2px;color:var(--gold);margin-bottom:8px}
+  .draw-status-wrap{min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:10px}
+  .draw-status{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;display:flex;align-items:center;justify-content:center;gap:10px;transition:color 0.3s;text-align:center}
+  .draw-status.s1{color:var(--s1)}.draw-status.s2{color:var(--s2)}.draw-status.s3{color:var(--s3)}.draw-status.s4{color:var(--s4)}
+  .status-flag{width:32px;height:21px;object-fit:cover;border-radius:2px;border:1px solid rgba(255,255,255,0.15);display:none;flex-shrink:0}
+  .status-flag.show{display:inline-block}
+  .ellipsis-wrap{font-family:'Bebas Neue',sans-serif;font-size:26px;min-height:36px;display:flex;align-items:center;justify-content:center;gap:6px}
+  .ell-dot{display:inline-block;opacity:0;animation:ellAnim 1.2s ease-in-out infinite;font-size:32px}
+  .ell-dot:nth-child(1){animation-delay:0s}.ell-dot:nth-child(2){animation-delay:0.3s}.ell-dot:nth-child(3){animation-delay:0.6s}
+  @keyframes ellAnim{0%,100%{opacity:0;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}
+  @keyframes slam-in{0%{transform:scale(1.6);opacity:0}60%{transform:scale(0.95);opacity:1}80%{transform:scale(1.05)}100%{transform:scale(1)}}
+  .team-slam{animation:slam-in 0.5s cubic-bezier(0.22,1,0.36,1) forwards}
+  .results-sub{font-size:13px;color:var(--muted)}
+  .results-grid{display:grid;grid-template-columns:1fr;gap:16px}
+  @media(min-width:640px){.results-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:900px){.results-grid{grid-template-columns:repeat(3,1fr)}}
+  .player-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;opacity:0;transform:translateY(16px);transition:opacity 0.35s ease,transform 0.35s ease}
+  .player-card.visible{opacity:1;transform:translateY(0)}
+  .player-name{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;margin-bottom:12px;color:var(--text);border-bottom:1px solid var(--border);padding-bottom:10px}
+  .team-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+  .team-slot{display:flex;align-items:center;gap:8px;font-size:13px;padding:2px 0}
+  @keyframes shake-in{0%{transform:translateX(-8px) scale(1.05);opacity:0}30%{transform:translateX(6px) scale(1.03);opacity:1}55%{transform:translateX(-4px) scale(1.01)}75%{transform:translateX(3px)}100%{transform:translateX(0) scale(1)}}
+  .team-slot.just-added{animation:shake-in 0.4s ease forwards}
+  .seed-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .seed-dot.s1{background:var(--s1)}.seed-dot.s2{background:var(--s2)}.seed-dot.s3{background:var(--s3)}.seed-dot.s4{background:var(--s4)}
+  .seed-dot.empty{background:var(--border)}
+  .slot-label{font-size:9px;letter-spacing:1px;color:var(--muted);width:44px;flex-shrink:0;font-weight:600}
+  .slot-flag{width:24px;height:16px;object-fit:cover;border-radius:2px;flex-shrink:0;border:1px solid rgba(255,255,255,0.12)}
+  .slot-flag-empty{width:24px;height:16px;background:var(--border);border-radius:2px;flex-shrink:0;opacity:0.3}
+  .team-name{font-weight:500;color:var(--text)}
+  .team-name.empty{color:var(--border)}
+  .gb-slot-meta{font-size:11px;color:var(--accent);font-weight:400}
+  .actions-row{display:flex;gap:10px;margin-top:32px;flex-wrap:wrap}
+  .btn-secondary{flex:1;background:var(--surface);border:1px solid var(--border);color:var(--silver);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;padding:12px 16px;border-radius:6px;cursor:pointer;transition:border-color 0.2s,background 0.2s;min-width:120px}
+  .btn-secondary:hover{background:var(--surface2);border-color:var(--gold);color:var(--text)}
+
+  /* ── LEADERBOARD ── */
+  .leaderboard-section{margin-top:0}
+  .leaderboard-placeholder{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:40px 24px;text-align:center}
+  .lb-icon{font-size:48px;margin-bottom:16px}
+  .lb-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:var(--gold);margin-bottom:8px}
+  .lb-sub{color:var(--muted);font-size:14px;line-height:1.6;max-width:480px;margin:0 auto 20px}
+  .lb-status-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:480px;margin:0 auto}
+  @media(max-width:400px){.lb-status-grid{grid-template-columns:1fr}}
+  .lb-status-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center}
+  .lb-status-label{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;color:var(--muted);margin-bottom:6px}
+  .lb-status-val{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--silver)}
+
+  /* ── FIXTURES ── */
+  .fixtures-section{margin-top:0}
+  .fixtures-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+  .filter-btn{background:var(--surface2);border:1px solid var(--border);color:var(--silver);font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;padding:7px 14px;border-radius:4px;cursor:pointer;transition:all 0.2s}
+  .filter-btn:hover,.filter-btn.active{background:var(--gold);color:#0a0e1a;border-color:var(--gold)}
+  .fixtures-stage{margin-bottom:36px}
+  .fixtures-stage-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--gold);margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:10px}
+  .fixtures-day{margin-bottom:24px}
+  .fixtures-day-header{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:3px;color:var(--silver);margin-bottom:10px;padding:6px 0;border-bottom:1px solid rgba(42,53,80,0.6)}
+  .match-row{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:6px;margin-bottom:6px;transition:border-color 0.2s}
+  .match-row:hover{border-color:rgba(245,200,66,0.3)}
+  .match-teams-cell{font-size:13px;font-weight:500;color:var(--text)}
+  .match-group-badge{font-size:10px;color:var(--muted);background:var(--surface2);border-radius:3px;padding:2px 6px;white-space:nowrap;margin-top:3px;display:inline-block}
+  .match-time-cell{text-align:right;min-width:80px}
+  .match-time-bst{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--s2);letter-spacing:1px}
+  .match-time-label{font-size:10px;color:var(--muted);letter-spacing:1px}
+  .match-venue-cell{font-size:11px;color:var(--muted);text-align:right;min-width:100px}
+  @media(max-width:500px){
+    .match-row{grid-template-columns:1fr auto;gap:8px}
+    .match-venue-cell{display:none}
+  }
+
+  /* ── PDF BUTTON ── */
+  .pdf-btn-wrap{text-align:center;margin:28px 0 8px}
+  .btn-pdf{background:var(--gold);color:#0a0e1a;border:none;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:3px;padding:14px 36px;border-radius:8px;cursor:pointer;transition:background 0.2s}
+  .btn-pdf:hover{background:var(--gold2)}
+
+  /* ── FOOTER ── */
+  .site-footer{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:28px 24px 20px;border-top:1px solid var(--border);margin-top:60px}
+  .footer-logo-wrap{flex-shrink:0}
+  .footer-logo{height:22px;opacity:0.55;transition:opacity 0.2s}
+  .footer-logo:hover{opacity:0.85}
+  .footer-text{font-size:11px;color:var(--muted);letter-spacing:0.5px}
+  .footer-text a{color:var(--muted);text-decoration:none;transition:color 0.2s}
+  .footer-text a:hover{color:var(--gold)}
+
+  /* ── CONFETTI ── */
+  #confetti-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999}
+
+  @media print{
+    body{background:white;color:black}
+    body::before,#confetti-canvas,#hostPanel,.setup-section,.page-nav,.fixtures-section,.leaderboard-section,.pdf-btn-wrap,.site-footer{display:none!important}
+    .results-block{display:block!important}
+    .actions-row,.draw-status-wrap{display:none}
+    .player-card{border:1px solid #ccc;break-inside:avoid;opacity:1!important;transform:none!important;background:white}
+    .results-title,.player-name,.team-name{color:#111}
+    .slot-label,.results-sub{color:#666}
+    .divider{display:none}
+  }
+</style>
+</head>
+<body>
+<canvas id="confetti-canvas"></canvas>
+<div class="container">
+
+  <!-- NAV -->
+  <nav class="page-nav">
+    <a href="#draw">⚽ THE DRAW</a>
+    <a href="#golden-boot">🥅 GOLDEN BOOT</a>
+    <a href="#leaderboard">📊 LEADERBOARD</a>
+    <a href="#fixtures">📅 FIXTURES</a>
+  </nav>
+
+  <!-- HEADER -->
+  <header>
+    <div class="badge">FIFA ⚽ 2026</div>
+    <h1>THE RADFORD<br><span>WORLD CUP SWEEPSTAKE</span></h1>
+    <p class="treasurer">Treasurer: Thea</p>
+    <p class="draw-time">⏰ Live draw begins <strong>5:00 PM BST</strong> · Thursday 11 June</p>
+    <p class="subtitle">12 players &nbsp;·&nbsp; 4 teams each &nbsp;·&nbsp; 4 Golden Boot contenders each &nbsp;·&nbsp; 48 teams</p>
+    <div class="prize-grid">
+      <div class="prize-card">
+        <div class="prize-icon">🏆</div>
+        <div class="prize-label">SWEEPSTAKE</div>
+        <div class="prize-split">
+          <div class="prize-item"><span class="prize-pos">WINNER</span><span class="prize-amt">£50</span></div>
+          <div class="prize-divider"></div>
+          <div class="prize-item"><span class="prize-pos">RUNNER-UP</span><span class="prize-amt">£10</span></div>
+        </div>
+        <div class="prize-note">£5 entry · £60 total pot</div>
+      </div>
+      <div class="prize-card">
+        <div class="prize-icon">🥅</div>
+        <div class="prize-label">GOLDEN BOOT</div>
+        <div class="prize-split">
+          <div class="prize-item"><span class="prize-pos">WINNER</span><span class="prize-amt">£24</span></div>
+        </div>
+        <div class="prize-note">£2 entry · £24 total pot · winner takes all</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HOST PANEL -->
+  <div id="hostPanel" style="display:none">
+    <div class="host-title">🎙 HOST CONTROLS</div>
+    <div class="host-row">
+      <input class="host-input" type="password" id="hostPassword" placeholder="Enter host password">
+      <button class="btn-host" id="startSweepstakeBtn">▶ START SWEEPSTAKE DRAW</button>
+      <button class="btn-host secondary" id="startGoldenBootBtn">🥅 START GOLDEN BOOT DRAW</button>
+    </div>
+    <div class="host-row">
+      <button class="btn-host secondary" id="resetDrawBtn" style="border-color:var(--danger);color:var(--danger)">🗑 RESET DRAW</button>
+      <span style="font-size:12px;color:var(--muted);flex:1">Clears the saved draw from the database and resets the page for all viewers.</span>
+    </div>
+    <div class="host-err" id="hostErr"></div>
+  </div>
+
+  <!-- PREVIEW SCREEN -->
+  <div id="previewScreen">
+    <div class="section-label">PARTICIPANTS</div>
+    <div class="participants-display" id="participantsDisplay"></div>
+    <div class="divider"></div>
+    <div class="waiting-box">
+      <div class="waiting-title">⚽ Waiting for the draw to begin...</div>
+      <p class="waiting-sub">The host will start the live draw at 5:00 PM BST · Thursday 11 June</p>
+      <div><span class="pulse"></span><span class="pulse"></span><span class="pulse"></span></div>
+    </div>
+    <div class="divider"></div>
+    <div class="section-title">⚽ COUNTRY SWEEPSTAKE</div>
+    <p class="section-sub">4 seeds · 12 teams each · 1 per player · drawn worst to best</p>
+    <div class="methodology-note">
+      <strong>How it works:</strong> All 48 qualified nations split across 4 seeds of 12, ranked by historical World Cup pedigree, current FIFA ranking, and genuine tournament threat. Every player draws one team from each seed — starting from Seed 4 (rank outsiders) and building up to the Seed 1 elite reveal. Entry: £5. Winner takes £50. Runner-up gets £10.
+    </div>
+    <div class="seeds-grid" id="seedsGridPreview"></div>
+    <div class="divider"></div>
+    <div class="section-title">🥅 GOLDEN BOOT</div>
+    <p class="section-sub">4 tiers · 12 strikers each · 1 per player · drawn worst to best</p>
+    <div class="methodology-note">
+      <strong>How it works:</strong> 48 Golden Boot contenders ranked by bookmaker odds (Sky Bet) across 4 tiers of 12. Every player draws one striker per tier — from Tier 4 (rank outsiders) up to the Tier 1 favourites reveal. Entry: £2. Winner takes all (£24).
+    </div>
+    <div class="seeds-grid" id="gbTiersGridPreview"></div>
+  </div>
+
+  <!-- HOST SETUP -->
+  <div class="setup-section" id="setupSection" style="display:none">
+    <div class="section-label">PARTICIPANTS</div>
+    <div class="participants-grid" id="participantsGrid"></div>
+    <div class="divider"></div>
+    <div class="section-label">SEED POTS</div>
+    <div class="methodology-note">
+      <strong>How the seeding works:</strong> 48 teams across 4 seeds of 12. Every player draws one team from each seed, starting from Seed 4 (rank outsiders) up to Seed 1 (elite reveal).
+    </div>
+    <div class="seeds-grid" id="seedsGrid"></div>
+  </div>
+
+  <div class="divider" id="mainDivider" style="display:none"></div>
+
+  <!-- SWEEPSTAKE RESULTS -->
+  <div id="draw"></div>
+  <div id="sweepstakeResults" class="results-block">
+    <div class="results-header">
+      <div class="results-title">⚽ THE DRAW</div>
+      <div class="draw-status-wrap">
+        <div class="draw-status" id="swDrawStatus">
+          <img class="status-flag" id="swStatusFlag" src="" alt="">
+          <span id="swStatusText"></span>
+        </div>
+        <div class="ellipsis-wrap" id="swEllipsisWrap" style="display:none">
+          <span class="ell-dot">·</span><span class="ell-dot">·</span><span class="ell-dot">·</span>
+        </div>
+      </div>
+      <p class="results-sub" id="swDrawTimestamp"></p>
+    </div>
+    <div class="results-grid" id="swResultsGrid"></div>
+    <div class="actions-row" id="swActionsRow" style="display:none">
+      <button class="btn-secondary" onclick="window.print()">🖨 Download PDF / Print</button>
+      <button class="btn-secondary" id="swCopyBtn">📋 Copy results</button>
+      <button class="btn-secondary" id="swPermLinkBtn">🔗 Permanent link</button>
+    </div>
+  </div>
+
+  <div class="divider" id="gbDivider" style="display:none"></div>
+
+  <!-- GOLDEN BOOT RESULTS -->
+  <div id="golden-boot"></div>
+  <div id="gbResults" class="results-block">
+    <div class="results-header">
+      <div class="results-title">🥅 GOLDEN BOOT</div>
+      <div class="draw-status-wrap">
+        <div class="draw-status" id="gbDrawStatus">
+          <img class="status-flag" id="gbStatusFlag" src="" alt="">
+          <span id="gbStatusText"></span>
+        </div>
+        <div class="ellipsis-wrap" id="gbEllipsisWrap" style="display:none">
+          <span class="ell-dot">·</span><span class="ell-dot">·</span><span class="ell-dot">·</span>
+        </div>
+      </div>
+      <p class="results-sub" id="gbDrawTimestamp"></p>
+    </div>
+    <div class="results-grid" id="gbResultsGrid"></div>
+    <div class="actions-row" id="gbActionsRow" style="display:none">
+      <button class="btn-secondary" onclick="window.print()">🖨 Download PDF / Print</button>
+      <button class="btn-secondary" id="gbCopyBtn">📋 Copy results</button>
+      <button class="btn-secondary" id="gbPermLinkBtn">🔗 Permanent link</button>
+    </div>
+  </div>
+
+  <!-- LEADERBOARD -->
+  <div class="divider"></div>
+  <div id="leaderboard" class="leaderboard-section">
+    <div class="section-title">📊 LEADERBOARD</div>
+    <p class="section-sub">Live standings updated daily from the tournament · Powered by football-data.org</p>
+    <div class="leaderboard-placeholder" id="leaderboardContent">
+      <div class="lb-icon">🏟️</div>
+      <div class="lb-title">Tournament Begins 11 June</div>
+      <p class="lb-sub">The leaderboard will go live once the World Cup kicks off. Country standings and Golden Boot scores will update automatically each day.</p>
+      <div class="lb-status-grid">
+        <div class="lb-status-card">
+          <div class="lb-status-label">COUNTRY TRACKER</div>
+          <div class="lb-status-val">Coming Soon</div>
+        </div>
+        <div class="lb-status-card">
+          <div class="lb-status-label">GOLDEN BOOT</div>
+          <div class="lb-status-val">Coming Soon</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FIXTURES -->
+  <div class="divider"></div>
+  <div id="fixtures" class="fixtures-section">
+    <div class="section-title">📅 FULL MATCH SCHEDULE</div>
+    <p class="section-sub">All 104 matches · Times in BST (London)</p>
+    <div class="pdf-btn-wrap">
+      <button class="btn-pdf" onclick="window.print()">🖨 Download PDF / Print Schedule</button>
+    </div>
+    <div class="fixtures-filter" id="fixturesFilter"></div>
+    <div id="fixturesContainer"></div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-logo-wrap">
+      <a href="https://oriel-agency.com/" target="_blank" rel="noopener">
+        <img src="data:image/png;base64,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8MPQ6n/+ioV465riuKIi1QKe9g/7PDPyXU/uKBFPewf9nhn5Lqf3FzXHZ1oAiIsGgs1drA720Ni4/wDuox/9Ma0qWam1b4QmL/O2fQsV46nSL0RFqgREQEREBERAREQTfsP+EHa/M6r6IrQxZ57D/hB2vzOq+iK0MWW+rzwREUKZwbYvhH4r8ql/ZIVEalzbF8I/FflUv7JCojW84zvRERdccyx07au9UNK4bzZqmOMjrBcAtb1k7gYNONrEH+x9cqfXxco1axLP/wBF5ERFmoREQEREBERAREQEREBERAREQEREFEu6C0vJZyWupA72exRan3zZpgf1aKuKs53Q/wCyTh38j/8A7PVY1tnjO9ERFTgrn9zp9zWL/PKf5j1TBXP7nT7msX+eU/zHqd8dz1axERYtHxU+15PIPyIlT7Xk8g/IiDp8v6/11wFh657296stdNPr178TXf6ru1FWyVfPX3IDDErn70tHA+hkH3PIvcxo/MDD6VKq7euQWfG3Na3W/P6tqywtbcqCmqgdPZaM5LX/AOpaDqpvdD8LvmtOG8YwR6imlkt9SQOOjxvxnxAtkHjcF3F/XNcU2REWyBERAREQEREBERAREQERe3yIwu/GOb2GrCI9+GWuZLUjThyMf1yT/taR4yEGk2XVrdY8v8O2Z7Cx1Da6amc084LImtP6wu+RF52os+tumv8AVmftVT72vqG3U0Hi1aZP/wBFoKswNoW+fVFnbi66h++x1ykgjd90yL60w/msCvHU648GiItUCnvYP+zwz8l1P7igRT3sH/Z4Z+S6n9xc1x2daAIiLBoLNTat8ITF/nbPoWLStZqbVvhCYv8AO2fQsV46nSL0RFqgREQEREBERAREQTfsP+EHa/M6r6IrQxZ57D/hB2vzOq+iK0MWW+rzwREUKZwbYvhH4r8ql/ZIVEalzbF8I/FflUv7JCojW84zvRERdccq01RorpSVo56edko/yuB/0WuLSHNDgdQRqCshFq9l1dW3zAGHryw6iutlNUeIvia4j9az/wDRWXeoiLNatHdBX1dPl3h6tpaieDcuxic6J5brvQvOh08hUp9ebv8AfWu/SH/xV/8Abdsz7tkDcaiNm+62VdPWadOm9yZPoEhPiBWeS1xxGuud683f76136Q/+KevN3++td+kP/iuCitLnevN3++td+kP/AIp683f76136Q/8AiuCiDnevN3++td+kP/inrzd/vrXfpD/4rgog53rzd/vrXfpD/wCKevN3++td+kP/AIrgog53rzd/vrXfpD/4p683f76136Q/+K4KIOd683f76136Q/8Ainrzd/vrXfpD/wCK4KIOd683f76136Q/+KevN3++td+kP/iuCiD9qqqqqt4fVVM07gNAZHlxA9K/FEQEREBXP7nT7msX+eU/zHqmCuf3On3NYv8APKf5j1O+O56tYiIsWj4qfa8nkH5ESp9ryeQfkRBU3ueGKuUt+JMFTyd9DIy5UrSeO64COX0AiL84q2qzC2fsbuy/zZsuIZJCyi5X1PXjoNPJ3ryevd4PA62haeMc17Q9jg5rhqCDqCFe5+pzfx/V5PN/B1Pj7Li9YVn3Q+spz6nkdzRzt76N3iDgNezUdK9YihTIy50VXbLjU26vgfT1dLK6GeJ40dG9pIc09oIIXHVsNunKaSluBzOsVMXU1SWxXiNjf7qTg1k/Dodwa732h+2Kqet5fYzs8ERF1wREQEREBERAREQFcbufuAXwUl0zFuFOQagGgthcOdgIM0g8bg1oPvXhVpyewDdcycd0OGbYHMbK7lKuo3dW00APfyH5AOkkDpWnWF7JbsNYdoLBaIBBQUEDYIGdIa0aak9JPOT0kkqN3/FZjsURFkt5rNTE0eDcub/id7mh1voZJYg7mdLppG30vLR6VlXLI+WV8sr3Pe9xc5zjqSTzkq5vdBMc+pLFaMv6ObSWud6vrwDxELCRE09jnhzv/jCpgtcT8RoREVpFPewf9nhn5Lqf3FAinvYP+zwz8l1P7i5rjs60AREWDQWam1b4QmL/ADtn0LFpWs1Nq3whMX+ds+hYrx1OkXoiLVAiIgIiICIiAiIgm/Yf8IO1+Z1X0RWhizz2H/CDtfmdV9EVoYst9XngiIoUzg2xfCPxX5VL+yQqI1Lm2L4R+K/Kpf2SFRGt5xneiIi64LRnY1vzL5kBY2b+9PbHy0E3vSx5cwf9N8azmVsu544qZBdsR4MqJdDVRsuFI0ngXM7yUDtIdGfE0qdz8dz1clERYtHUY2sNPijB94w5VHdhuVFLSudp7HfaQHeMEg+hZS3agqrXdKu2V0RiqqSd8E8Z52vY4tcPQQVriqKbdeXUmH8ex43oINLZftBUFo4RVbW98D1b7RvDrIerxf8AE6it6Ii1QIiICIiAiIgIiIC9XXZdY1o8EUWNZsPVhsFa1zo6xjd9rQHFurwOLASOBcADw0JXNyPy8uGZmYNFhyk346XXlq+pA4QU7SN53jOoaO0jo1WnNtttDbrRTWmipo4aGmgbTwwAd62Nrd0N06tBop1rx2T1kciv3nHsuYNxfy1ywsWYYvDtXEQx60kzvfRj2HjZoOndKpvmflfjXLi4epsUWeSCFzt2Gti+uU03kyDhr706O6wk1KWePGIiKnBERAVz+50+5rF/nlP8x6pgrn9zp9zWL/PKf5j1O+O56tYiIsWj4qfa8nkH5ESp9ryeQfkRBkOtAdivMkYyy2bh241AfecPtbTu3nd9LTc0T+3QDcPkgn2Sz+XrMpMdXTLrHlvxRayXGB25Uwb2jaiB3s4z4xzHoIB6FtqexnL41PRdRgzEloxfhihxHYqptTb62ISRPHOOgtcOhwOoI6CCu3WLR+FxoqS5W+ot9fTRVNJUxuimhlaHMkY4aFpB5wQVnttN5G3HLG8Pu1pjmrMKVch5CfQudSOJ4RSH5runxrRBce50FFdLfUW640kNXR1EZjmgmYHskaecEHgQu5145Z6yMRWoz62VLjbJZ79lmyS4UJJfJaHu1nh6frTj/eN96e+5vZKrlZTVFHVS0tXTy09RE4skilYWvY4c4IPEHsW0sqLPH5IiLrgiIgIiIC7nBeF75jHElJh7D1BJW3CqdoxjRwaOlzjzNaOck8Ava5NZI42zNqopbdROt9l3tJbrVMLYQOncHPI7sbw15yFfLJzKrCuV1iNvsNOZauYA1lwmAM9QR1noaOho4DtOpM6147J64eQGU9pypwgLdTuZV3aq0kuVdu6GZ45mt6QxupAHaTzlSOiLG/rQXAxFeLfh+w117u1Q2noaGB888jvtWtGp8Z6h0ngueqV7cWbzLxcP6NsPVYfQUUofd5Y3cJZ2nvYdekMPE++0HO1dk9rlviv+aeMa/H2Pbriq4atfWzExRE6iGIcI4x4mgDtOp6V5hEW7MREQFPewf9nhn5Lqf3FAinvYP+zwz8l1P7i5rjs60AREWDQWam1b4QmL/O2fQsWlazU2rfCExf52z6FivHU6ReiItUCIiAiIgIiICIiCb9h/wg7X5nVfRFaGLPPYf8IO1+Z1X0RWhiy31eeCIihTODbF8I/FflUv7JCojUubYvhH4r8ql/ZIVEa3nGd6IiLrgvVZS4tnwLmPY8VQ75bQ1TXTsbzvhd3srfSwuHjXlUQa6W2tpblbqa40M7KikqomzQSsOrXscAWuHYQQV+6q/sJZnxXbDT8ubtU/+I2wOltpef76mJ1cwdZY4nh9yRpwaVaBYWeVpL6LzuZODrRj3Blwwve496lrI9GyAd/DIOLJG++adD28x4Er0SLjrKrM3BF9y+xhV4av9PydRAd6KVo+t1ER9jIw9LTp6DqDxBC8ytPc7cqsO5p4aNtu7PU9dAC6guEbQZaZ5+cw6DVp5+wgEZ75s5Y4syzvht2I6AiF7j6mrogXU9SOtruvradCOrmW2des7PHikRFTgiIgIiIC5+HrPc8QXukstmopa24VkgiggiGrnuPyDpJPAAEnguxwFg3EmOb/ABWTDFrmr6t5BdujRkTfu3u5mt7T4udX/wBnbJCy5VWk1UzorliWpZpVV+7wjb/hRa8QzrPO48TpwAnWvHZPXP2dsp7dlVgxtCDHU3utDZbnVtHB7wOEbfeN1IHXqTw10Emoixt9aC4GIYbRUWOtjv8ADRzWoQudVsq2NdDyYGri8O4aADXj1LnqqO3Nm4KGgdljYKkeqqpjX3mVh4xxHi2Dxu4Od73QfbFdk9rlviqOYdbYLjje71uFrYLZZJapxoaYOcdyMcAe+JIJ03tNdBroOAXQIi3ZiIiArn9zp9zWL/PKf5j1TBXP7nT7msX+eU/zHqd8dz1axERYtHxU+15PIPyIlT7Xk8g/IiDIdERehkmvZazrnyvxA62Xd0s+FrjIDUxt1caWTgOXYOnhwcBzgDpAB0ItldRXS3U9xt1VDV0dTG2WCaJwcyRhGocCOcELIxTbs35+XfLGrjst2E1zwpLJq+nB1kpCTxfFr0dJYeB5xoSSY1n39ipWhyLq8KYismKrHT3vD1yp7jb6gaxzQu1GvSCOdrh0tOhHSu0WSxeJzKypwHmHC4YmsFPNVbu6yuh+tVLOrSRvEgdTtR2L2yIKd432M6tsj5sFYthljOu7TXaMtcP/AJYwQfzAomvuzZnHanP/APKZrom80lHVwyB3ibvB/wD2rR1Fc3U/MZfy5N5qxvDHZe4kJP3NA9w+EBdha8hc4LjIGU+A7pGT01G5APhkc0LTBE+6fKiWEtkHMO5OZJf7nZ7FCT37eUNTM3/KzvD+ep8y22X8tcJSx1lyppsTV7NDv3HQwNPW2Ed7p2P3lOKLl1a75HzDFFBCyGGNkUUbQ1jGNAa0DmAA5gvpEUuiIq0bS20pQ4XjqMLYBqoK6+kGOpr2aPhojzEN6Hyfqb06nUDsnrlvjn7Wee8GCLbUYOwtVCTFFVFuzzxu4W6Nw5yf8Ug96OjXePRrQ17nPeXvcXOcdSSdSSv1rqqprq2atraiWpqZ5HSTTSvLnyPJ1LnE8SSelfitszxFvoiIuuCIiAp72D/s8M/JdT+4oEU97B/2eGfkup/cXNcdnWgCIiwaCzU2rfCExf52z6Fi0rWam1b4QmL/ADtn0LFeOp0i9ERaoEREBERAREQEREE37D/hB2vzOq+iK0MWeew/4Qdr8zqvoitDFlvq88ERFCmcG2L4R+K/Kpf2SFRGpc2xfCPxX5VL+yQqI1vOM70REXXBERB2mFL9dML4koMQ2WpNNcKCZs0Eg6x0EdLSNQR0gkLSzI/Myz5o4KhvluLYKyLSK4URdq6mm05u1p52u6R2ggZfr12VGYWIstsVxX/D1Ro7gyppnk8lVR68WPHyHnB4hTrPrsvjU1F4jJ7M/DGZ+G2XWxVLWVMbQK2gkcOWpXnocOlvPo4cD49QPbrFoLg3+zWnEFpntN7t1LcaGdu7LBURh7Heg9PUecLnIgqxmZsfWS4SyVuAr26zyO1IoK7emg16myDv2Dxh6gLFeztm9h57uUwlUXKEHQS217akO8TWnf8AhaFpIiqbsT8xlBXYPxbQSOjrsLXyle3nbNb5WEegtX50mFsT1bwykw5eKhzuYRUUjifgC1jRV/Q+WZuGsiM28QPaKTA90pmOPGSvYKRoHX9dLSR4gVOWXGxzLysdXj/ETAwEE0Nq1Jd2OleBp1EBvicrgIuXdPmOjwThDDWC7M20YXs9LbKMcXNib30h+6e46ue7tcSV3iIoUIiivP7OrDuVdndHI+OvxFPGTR21ruPHmkl09gzX0u00HSQk9H57SucFDlZhI+pnw1GJK9hbbqUnXc6DM8fcN/7jw6yM5rrcK263OpudyqpaqsqpXTTzSu1dI9x1Lieslc/GeJ73jDElXiHENdJWXCrfvSPdzNHQ1o5mtA4ADmXTLbOfGdvoiIqcEREBXP7nT7msX+eU/wAx6pgrn9zp9zWL/PKf5j1O+O56tYiIsWj4qfa8nkH5ESp9ryeQfkRBkOiIvQyEREHssqsy8W5a3v1ywzcDGx5Hqmjl1dT1IHQ9mvP1OGhHQVdvJnaSwPjxsNvuszMN3x2g9TVco5GZ3/DlOgPku0PVrzrPJFNzK7L417HEahFmhljnpmRl+yOltN7dWW1mgFBcAZ4AOpupDmDsa4BWMwLtjYarI2Q4xw5XWqfmM9C4VEJ7S07rmjsG8s7ixU1Fo0Uf4YzqyqxFG11uxzZmOdzR1c3qWTXq3Zd0n0L3NDW0VfAJ6Grp6qI8z4ZA9vwhSp+6IhIAJJAA5yUBF5u+4/wNYmvN4xhYaEt52TV8TX+huupPYAorxftW5V2VsjLXUXHEFQ3g1tHTFkeva+Xd4doDl2S1z1PC8rmLmHg/L+1mvxTeqei1brFTg7083YyMd87x8w6SFTXMPa0zAv7JaTDdLR4ZpH6gPi+v1On/ADHDdHjDQR1qArrca+618twuldU11ZM7elnqJXSSPPWXOJJVTH/XLpO2eu03iXHMM9kwxHNh6wyatkLX/wBqqm9T3Dgxp+5b2guI4Kv6ItJPEeiIi6CIiAiIgKe9g/7PDPyXU/uKBF7/ACFzFbldj1uKXWg3YClkp/U4qOR9npx3t13NpzaLl/Y7GniKo39dWH8W8nx0P9hP66sP4t5Pjof7Cy+av6i3KzU2rfCExf52z6FinL+urD+LeT46H+wqzZsYtGOsxLxi1tAbeLlK2T1MZeU5PRjW6b2g19jrzDnVYllTq+vLIiLRIiIgIiICIiAiIgm/Yf8ACDtfmdV9EVoYsvcjMfNy0zDpcWPtRugp4ZYvU4n5He32Fuu9uu5tepWJ/rq0/wCLiX45H+ys9Ztqs1blFUb+urT/AIuJfjkf7Kf11af8XEvxyP8AZU/NV7EM7YvhH4r8ql/ZIVEa9fnLjRuYWZN2xg23G2i4GI+pjNyvJ7kLI/ZbrdddzXmHOvILWcZ0REXQREQEREHcYPxNfcIX+nvuHLlPb7hTnvJYjzjpa4Hg5p6WnUFXUyR2qMN4mbDaMdiDD13OjRV72lHOfKP90exx3ffdComi5cyuy+NeIJoqiBk8ErJYpGhzHscHNcDzEEc4X2swMtM3cf5eOEeG79Myi3tXUNQOWpndfeO9jr0luh7VZHAm2TaZ444MbYXqaObmdVWxwljJ6+TeQ5o8TnFZ3Fippa5FHeF88MqMRMYaDHFpikfzRVsnqV+vVpKG6nxar31HV0lbCJ6OqgqYjzPikD2n0hR4p+yIiAi/CtraOhhM1bVwUsQ53zSBjfhKj7FOemU2HGvFdja2Tys/9KheapxPV9aDgD4yE8EkLj3KuorbQzV9xq6ejpIG78s88gZHG3rc48APGqo4+2yqRkctPgbC0ssnEMrLq8NaO3kmEk+l48SrVmLmZjjMCp5XFV/qq2Jrt6OlaRHTxn3sbdG69GumvarmKm6Wfz02sKGhjmsmWW5XVZBbJd5o/rMX/KY72Z984bvY4FU8vNzuN5ulRdbtWz1tdUvMk887y58jj0klcNFpJIm30REXXBERAREQFc/udPuaxf55T/MeqYKatnDPSPKG2Xiifhh959cpo5Q4V3IcnuNI003Ha669inU9js60RRVG/rq0/wCLiX45H+yn9dWn/FxL8cj/AGVn81fsW2qfa8nkH5EVR5dtOB8bmf0cyjeBGvryP9lE+KfUU/REWzMREQEREBERAX6QTzQP34JpIndbHEH9SIg7CLEeIYmFkV+ujGnnDauQD5Vxaq43CrBFVX1U4PPykzna/CURcdcVERdcEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQF+tLU1NLKJaWolgkHM+N5aR6QiIO7gxvjSn05DF+IItObcuUzfkcv5PjbGdRry+Lr/AC6/d3GZ3yuRFDrpaqpqKqUzVU8s8h53yPLifSV+SIrcEREBERAREQEREBERAREQEREBERB//9k=" alt="Oriel" class="footer-logo">
+      </a>
+    </div>
+    <p class="footer-text">Website created by <a href="https://oriel-agency.com/" target="_blank" rel="noopener">Oriel</a> · 2026</p>
+  </footer>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/pusher-js@8.2.0/dist/web/pusher.min.js"></script>
+<script>
+// ── CONFIG — replace with Radford project credentials ─────────────────────────
+const PUSHER_KEY     = 'RADFORD_PUSHER_KEY_HERE';
+const PUSHER_CLUSTER = 'eu';
+const SUPABASE_URL   = 'RADFORD_SUPABASE_URL_HERE';
+const SUPABASE_ANON_KEY = 'RADFORD_SUPABASE_ANON_KEY_HERE';
+// ─────────────────────────────────────────────────────────────────────────────
+
+const FLAG = 'https://flagcdn.com/w40/';
+function furl(c){ return FLAG+c+'.png'; }
+function fimg(c,cls){ return `<img class="${cls}" src="${furl(c)}" alt="" onerror="this.style.display='none'">`; }
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+const NORMAL_DELAY      = 3000;
+const SUSPENSE_ANNOUNCE = 4000;
+const SUSPENSE_ELLIPSIS = 7000;
+const SUSPENSE_REVEAL   = 800;
+
+// ── SEEDS (4 seeds of 12) ─────────────────────────────────────────────────────
+const SEEDS = [
+  {id:1,cls:'s1',label:'SEED 1',desc:'Elite contenders',teams:[
+    {name:'France',code:'fr'},{name:'Spain',code:'es'},{name:'Argentina',code:'ar'},
+    {name:'England',code:'gb-eng'},{name:'Brazil',code:'br'},{name:'Germany',code:'de'},
+    {name:'Portugal',code:'pt'},{name:'Netherlands',code:'nl'},{name:'Belgium',code:'be'},
+    {name:'Croatia',code:'hr'},{name:'Norway',code:'no'},{name:'Colombia',code:'co'},
+  ]},
+  {id:2,cls:'s2',label:'SEED 2',desc:'Competitive — could upset anyone',teams:[
+    {name:'USA',code:'us'},{name:'Mexico',code:'mx'},{name:'Morocco',code:'ma'},
+    {name:'Senegal',code:'sn'},{name:'Japan',code:'jp'},{name:'Switzerland',code:'ch'},
+    {name:'South Korea',code:'kr'},{name:'Austria',code:'at'},{name:'Uruguay',code:'uy'},
+    {name:'Turkey',code:'tr'},{name:'Sweden',code:'se'},{name:'Iran',code:'ir'},
+  ]},
+  {id:3,cls:'s3',label:'SEED 3',desc:'Outsiders',teams:[
+    {name:'Australia',code:'au'},{name:"Côte d'Ivoire",code:'ci'},{name:'Canada',code:'ca'},
+    {name:'Ghana',code:'gh'},{name:'Algeria',code:'dz'},{name:'Scotland',code:'gb-sct'},
+    {name:'Tunisia',code:'tn'},{name:'Paraguay',code:'py'},{name:'South Africa',code:'za'},
+    {name:'Egypt',code:'eg'},{name:'Panama',code:'pa'},{name:'Qatar',code:'qa'},
+  ]},
+  {id:4,cls:'s4',label:'SEED 4',desc:'Rank outsiders',teams:[
+    {name:'Saudi Arabia',code:'sa'},{name:'Czechia',code:'cz'},{name:'Bosnia & Herz.',code:'ba'},
+    {name:'Ecuador',code:'ec'},{name:'New Zealand',code:'nz'},{name:'Cabo Verde',code:'cv'},
+    {name:'Curaçao',code:'cw'},{name:'Haiti',code:'ht'},{name:'Jordan',code:'jo'},
+    {name:'Uzbekistan',code:'uz'},{name:'DR Congo',code:'cd'},{name:'Iraq',code:'iq'},
+  ]},
+];
+
+// ── GOLDEN BOOT TIERS (4 tiers of 12) ────────────────────────────────────────
+const GB_TIERS = [
+  {id:1,cls:'s1',label:'TIER 1',desc:'Outright favourites',players:[
+    {name:'Kylian Mbappe',       country:'France',      code:'fr',    odds:'11/2'},
+    {name:'Harry Kane',          country:'England',     code:'gb-eng',odds:'13/2'},
+    {name:'Erling Haaland',      country:'Norway',      code:'no',    odds:'12/1'},
+    {name:'Mikel Oyarzabal',     country:'Spain',       code:'es',    odds:'12/1'},
+    {name:'Lionel Messi',        country:'Argentina',   code:'ar',    odds:'14/1'},
+    {name:'Lamine Yamal',        country:'Spain',       code:'es',    odds:'16/1'},
+    {name:'Cristiano Ronaldo',   country:'Portugal',    code:'pt',    odds:'18/1'},
+    {name:'Julian Alvarez',      country:'Argentina',   code:'ar',    odds:'22/1'},
+    {name:'Vinicius Junior',     country:'Brazil',      code:'br',    odds:'22/1'},
+    {name:'Ousmane Dembele',     country:'France',      code:'fr',    odds:'22/1'},
+    {name:'Lautaro Martinez',    country:'Argentina',   code:'ar',    odds:'25/1'},
+    {name:'Raphinha',            country:'Brazil',      code:'br',    odds:'25/1'},
+  ]},
+  {id:2,cls:'s2',label:'TIER 2',desc:'Strong contenders',players:[
+    {name:'Romelu Lukaku',       country:'Belgium',     code:'be',    odds:'28/1'},
+    {name:'Kai Havertz',         country:'Germany',     code:'de',    odds:'28/1'},
+    {name:'Ferran Torres',       country:'Spain',       code:'es',    odds:'33/1'},
+    {name:'Michael Olise',       country:'France',      code:'fr',    odds:'33/1'},
+    {name:'Cody Gakpo',          country:'Netherlands', code:'nl',    odds:'33/1'},
+    {name:'Nick Woltemade',      country:'Germany',     code:'de',    odds:'33/1'},
+    {name:'Florian Wirtz',       country:'Germany',     code:'de',    odds:'33/1'},
+    {name:'Igor Thiago',         country:'Brazil',      code:'br',    odds:'33/1'},
+    {name:'Charles De Ketelaere',country:'Belgium',     code:'be',    odds:'33/1'},
+    {name:'Jamal Musiala',       country:'Germany',     code:'de',    odds:'40/1'},
+    {name:'Jonathan David',      country:'Canada',      code:'ca',    odds:'40/1'},
+    {name:'Luis Diaz',           country:'Colombia',    code:'co',    odds:'40/1'},
+  ]},
+  {id:3,cls:'s3',label:'TIER 3',desc:'Dark horses',players:[
+    {name:'Bukayo Saka',         country:'England',     code:'gb-eng',odds:'40/1'},
+    {name:'Bruno Fernandes',     country:'Portugal',    code:'pt',    odds:'40/1'},
+    {name:'Jude Bellingham',     country:'England',     code:'gb-eng',odds:'40/1'},
+    {name:'Memphis Depay',       country:'Netherlands', code:'nl',    odds:'40/1'},
+    {name:'Matheus Cunha',       country:'Brazil',      code:'br',    odds:'40/1'},
+    {name:'Desire Doue',         country:'France',      code:'fr',    odds:'40/1'},
+    {name:'Neymar Jr',           country:'Brazil',      code:'br',    odds:'40/1'},
+    {name:'Luis Javier Suarez',  country:'Colombia',    code:'co',    odds:'40/1'},
+    {name:'Ollie Watkins',       country:'England',     code:'gb-eng',odds:'40/1'},
+    {name:'Brian Brobbey',       country:'Netherlands', code:'nl',    odds:'40/1'},
+    {name:'Sadio Mane',          country:'Senegal',     code:'sn',    odds:'50/1'},
+    {name:'Marcus Thuram',       country:'France',      code:'fr',    odds:'50/1'},
+  ]},
+  {id:4,cls:'s4',label:'TIER 4',desc:'Rank outsiders',players:[
+    {name:'Darwin Nunez',        country:'Uruguay',     code:'uy',    odds:'50/1'},
+    {name:'Alexander Sorloth',   country:'Norway',      code:'no',    odds:'50/1'},
+    {name:'Goncalo Ramos',       country:'Portugal',    code:'pt',    odds:'50/1'},
+    {name:'Enner Valencia',      country:'Ecuador',     code:'ec',    odds:'50/1'},
+    {name:'Rafael Leao',         country:'Portugal',    code:'pt',    odds:'50/1'},
+    {name:'Breel Embolo',        country:'Switzerland', code:'ch',    odds:'50/1'},
+    {name:'Christian Pulisic',   country:'USA',         code:'us',    odds:'50/1'},
+    {name:'Jeremy Doku',         country:'Belgium',     code:'be',    odds:'50/1'},
+    {name:'Dani Olmo',           country:'Spain',       code:'es',    odds:'50/1'},
+    {name:'Viktor Gyokeres',     country:'Sweden',      code:'se',    odds:'50/1'},
+    {name:'Alexander Isak',      country:'Sweden',      code:'se',    odds:'50/1'},
+    {name:'Bradley Barcola',     country:'France',      code:'fr',    odds:'50/1'},
+  ]},
+];
+
+// ── PARTICIPANTS ──────────────────────────────────────────────────────────────
+const DEFAULT_NAMES = ['Alistair','Cathy','Doug','Echo','Espresso','Izzy','John','Millie','Ollie','Patrick','Ryan','Thea'];
+const CAT_NAMES = {
+  'Echo': '🟤', // brown/red cat
+  'Espresso': '⬛', // black cat
+};
+const isHost = window.location.search.includes('host=1');
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+function getCatIcon(name){
+  if(name==='Echo') return ' 🐈‍⬛'; // using ginger/brown approximation
+  if(name==='Espresso') return ' 🐈‍⬛';
+  return '';
+}
+
+// ── BST conversion (ET + 5hrs) ────────────────────────────────────────────────
+function etToBst(et){
+  const m=et.match(/(\d+):(\d+)\s*(AM|PM)/i);
+  if(!m) return '—';
+  let h=parseInt(m[1]);const min=m[2];const ampm=m[3].toUpperCase();
+  if(ampm==='PM'&&h!==12) h+=12;
+  if(ampm==='AM'&&h===12) h=0;
+  h=(h+5)%24;
+  const newAmpm=h>=12?'PM':'AM';
+  const newH=h%12||12;
+  return `${newH}:${min} ${newAmpm}`;
+}
+
+// ── FIXTURES DATA (BST) ───────────────────────────────────────────────────────
+const FIXTURES = [
+  {stage:'GROUP STAGE', icon:'⚽', days:[
+    {date:'Thursday 11 June',matches:[
+      {group:'A',teams:'Mexico vs South Africa',et:'3:00 PM',venue:'Mexico City'},
+      {group:'A',teams:'South Korea vs Czechia',et:'10:00 PM',venue:'Zapopan'},
+    ]},
+    {date:'Friday 12 June',matches:[
+      {group:'B',teams:'Canada vs Bosnia & Herzegovina',et:'3:00 PM',venue:'Toronto'},
+      {group:'D',teams:'USA vs Paraguay',et:'9:00 PM',venue:'Inglewood'},
+    ]},
+    {date:'Saturday 13 June',matches:[
+      {group:'B',teams:'Qatar vs Switzerland',et:'3:00 PM',venue:'Santa Clara'},
+      {group:'C',teams:'Brazil vs Morocco',et:'6:00 PM',venue:'East Rutherford'},
+      {group:'C',teams:'Haiti vs Scotland',et:'9:00 PM',venue:'Foxborough'},
+    ]},
+    {date:'Sunday 14 June',matches:[
+      {group:'D',teams:'Australia vs Türkiye',et:'12:00 AM',venue:'Vancouver'},
+      {group:'E',teams:'Germany vs Curaçao',et:'1:00 PM',venue:'Houston'},
+      {group:'F',teams:'Netherlands vs Japan',et:'4:00 PM',venue:'Arlington'},
+      {group:'E',teams:"Côte d'Ivoire vs Ecuador",et:'7:00 PM',venue:'Philadelphia'},
+      {group:'F',teams:'Sweden vs Tunisia',et:'10:00 PM',venue:'Monterrey'},
+    ]},
+    {date:'Monday 15 June',matches:[
+      {group:'H',teams:'Spain vs Cape Verde',et:'12:00 PM',venue:'Atlanta'},
+      {group:'G',teams:'Belgium vs Egypt',et:'3:00 PM',venue:'Seattle'},
+      {group:'H',teams:'Saudi Arabia vs Uruguay',et:'6:00 PM',venue:'Miami'},
+      {group:'G',teams:'Iran vs New Zealand',et:'9:00 PM',venue:'Inglewood'},
+    ]},
+    {date:'Tuesday 16 June',matches:[
+      {group:'I',teams:'France vs Senegal',et:'3:00 PM',venue:'East Rutherford'},
+      {group:'I',teams:'Iraq vs Norway',et:'6:00 PM',venue:'Foxborough'},
+      {group:'J',teams:'Argentina vs Algeria',et:'9:00 PM',venue:'Kansas City'},
+    ]},
+    {date:'Wednesday 17 June',matches:[
+      {group:'J',teams:'Austria vs Jordan',et:'12:00 AM',venue:'Santa Clara'},
+      {group:'K',teams:'Portugal vs DR Congo',et:'1:00 PM',venue:'Houston'},
+      {group:'L',teams:'England vs Croatia',et:'4:00 PM',venue:'Arlington'},
+      {group:'L',teams:'Ghana vs Panama',et:'7:00 PM',venue:'Toronto'},
+      {group:'K',teams:'Uzbekistan vs Colombia',et:'10:00 PM',venue:'Mexico City'},
+    ]},
+    {date:'Thursday 18 June',matches:[
+      {group:'A',teams:'Czechia vs South Africa',et:'12:00 PM',venue:'Atlanta'},
+      {group:'B',teams:'Switzerland vs Bosnia & Herzegovina',et:'3:00 PM',venue:'Inglewood'},
+      {group:'B',teams:'Canada vs Qatar',et:'6:00 PM',venue:'Vancouver'},
+      {group:'A',teams:'Mexico vs South Korea',et:'9:00 PM',venue:'Zapopan'},
+    ]},
+    {date:'Friday 19 June',matches:[
+      {group:'D',teams:'USA vs Australia',et:'3:00 PM',venue:'Seattle'},
+      {group:'C',teams:'Scotland vs Morocco',et:'6:00 PM',venue:'Foxborough'},
+      {group:'C',teams:'Brazil vs Haiti',et:'8:30 PM',venue:'Philadelphia'},
+      {group:'D',teams:'Türkiye vs Paraguay',et:'11:00 PM',venue:'Santa Clara'},
+    ]},
+    {date:'Saturday 20 June',matches:[
+      {group:'F',teams:'Netherlands vs Sweden',et:'1:00 PM',venue:'Houston'},
+      {group:'E',teams:"Germany vs Côte d'Ivoire",et:'4:00 PM',venue:'Toronto'},
+      {group:'E',teams:'Ecuador vs Curaçao',et:'8:00 PM',venue:'Kansas City'},
+    ]},
+    {date:'Sunday 21 June',matches:[
+      {group:'F',teams:'Tunisia vs Japan',et:'12:00 AM',venue:'Monterrey'},
+      {group:'H',teams:'Spain vs Saudi Arabia',et:'12:00 PM',venue:'Atlanta'},
+      {group:'G',teams:'Belgium vs Iran',et:'3:00 PM',venue:'Inglewood'},
+      {group:'H',teams:'Uruguay vs Cape Verde',et:'6:00 PM',venue:'Miami'},
+      {group:'G',teams:'New Zealand vs Egypt',et:'9:00 PM',venue:'Vancouver'},
+    ]},
+    {date:'Monday 22 June',matches:[
+      {group:'J',teams:'Argentina vs Austria',et:'1:00 PM',venue:'Arlington'},
+      {group:'I',teams:'France vs Iraq',et:'5:00 PM',venue:'Philadelphia'},
+      {group:'I',teams:'Norway vs Senegal',et:'8:00 PM',venue:'East Rutherford'},
+      {group:'J',teams:'Jordan vs Algeria',et:'11:00 PM',venue:'Santa Clara'},
+    ]},
+    {date:'Tuesday 23 June',matches:[
+      {group:'K',teams:'Portugal vs Uzbekistan',et:'1:00 PM',venue:'Houston'},
+      {group:'L',teams:'England vs Ghana',et:'4:00 PM',venue:'Foxborough'},
+      {group:'L',teams:'Panama vs Croatia',et:'7:00 PM',venue:'Toronto'},
+      {group:'K',teams:'Colombia vs DR Congo',et:'10:00 PM',venue:'Zapopan'},
+    ]},
+    {date:'Wednesday 24 June',matches:[
+      {group:'B',teams:'Switzerland vs Canada',et:'3:00 PM',venue:'Vancouver'},
+      {group:'B',teams:'Bosnia & Herzegovina vs Qatar',et:'3:00 PM',venue:'Seattle'},
+      {group:'C',teams:'Scotland vs Brazil',et:'6:00 PM',venue:'Miami'},
+      {group:'C',teams:'Morocco vs Haiti',et:'6:00 PM',venue:'Atlanta'},
+      {group:'A',teams:'Czechia vs Mexico',et:'9:00 PM',venue:'Mexico City'},
+      {group:'A',teams:'South Africa vs South Korea',et:'9:00 PM',venue:'Monterrey'},
+    ]},
+    {date:'Thursday 25 June',matches:[
+      {group:'E',teams:"Curaçao vs Côte d'Ivoire",et:'4:00 PM',venue:'Philadelphia'},
+      {group:'E',teams:'Ecuador vs Germany',et:'4:00 PM',venue:'East Rutherford'},
+      {group:'F',teams:'Japan vs Sweden',et:'7:00 PM',venue:'Arlington'},
+      {group:'F',teams:'Tunisia vs Netherlands',et:'7:00 PM',venue:'Kansas City'},
+      {group:'D',teams:'Türkiye vs USA',et:'10:00 PM',venue:'Inglewood'},
+      {group:'D',teams:'Paraguay vs Australia',et:'10:00 PM',venue:'Santa Clara'},
+    ]},
+    {date:'Friday 26 June',matches:[
+      {group:'I',teams:'Norway vs France',et:'3:00 PM',venue:'Foxborough'},
+      {group:'I',teams:'Senegal vs Iraq',et:'3:00 PM',venue:'Toronto'},
+      {group:'H',teams:'Cape Verde vs Saudi Arabia',et:'8:00 PM',venue:'Houston'},
+      {group:'H',teams:'Uruguay vs Spain',et:'8:00 PM',venue:'Zapopan'},
+      {group:'G',teams:'Egypt vs Iran',et:'11:00 PM',venue:'Seattle'},
+      {group:'G',teams:'New Zealand vs Belgium',et:'11:00 PM',venue:'Vancouver'},
+    ]},
+    {date:'Saturday 27 June',matches:[
+      {group:'L',teams:'Panama vs England',et:'5:00 PM',venue:'East Rutherford'},
+      {group:'L',teams:'Croatia vs Ghana',et:'5:00 PM',venue:'Philadelphia'},
+      {group:'K',teams:'Colombia vs Portugal',et:'7:30 PM',venue:'Miami'},
+      {group:'K',teams:'DR Congo vs Uzbekistan',et:'7:30 PM',venue:'Atlanta'},
+      {group:'J',teams:'Algeria vs Austria',et:'10:00 PM',venue:'Kansas City'},
+      {group:'J',teams:'Jordan vs Argentina',et:'10:00 PM',venue:'Arlington'},
+    ]},
+  ]},
+  {stage:'ROUND OF 32', icon:'🔥', days:[
+    {date:'Sunday 28 June',matches:[
+      {group:'R32',teams:'Runner-up A vs Runner-up B',et:'3:00 PM',venue:'Inglewood'},
+    ]},
+    {date:'Monday 29 June',matches:[
+      {group:'R32',teams:'Winner C vs Runner-up F',et:'1:00 PM',venue:'Houston'},
+      {group:'R32',teams:'Winner E vs Best 3rd',et:'4:30 PM',venue:'Foxborough'},
+      {group:'R32',teams:'Winner F vs Runner-up C',et:'9:00 PM',venue:'Monterrey'},
+    ]},
+    {date:'Tuesday 30 June',matches:[
+      {group:'R32',teams:'Runner-up E vs Runner-up I',et:'1:00 PM',venue:'Arlington'},
+      {group:'R32',teams:'Winner I vs Best 3rd',et:'5:00 PM',venue:'East Rutherford'},
+      {group:'R32',teams:'Winner A vs Best 3rd',et:'9:00 PM',venue:'Mexico City'},
+    ]},
+    {date:'Wednesday 1 July',matches:[
+      {group:'R32',teams:'Winner L vs Best 3rd',et:'12:00 PM',venue:'Atlanta'},
+      {group:'R32',teams:'Winner G vs Best 3rd',et:'4:00 PM',venue:'Seattle'},
+      {group:'R32',teams:'Winner D vs Best 3rd',et:'8:00 PM',venue:'Santa Clara'},
+    ]},
+    {date:'Thursday 2 July',matches:[
+      {group:'R32',teams:'Winner H vs Runner-up J',et:'3:00 PM',venue:'Inglewood'},
+      {group:'R32',teams:'Runner-up K vs Runner-up L',et:'7:00 PM',venue:'Toronto'},
+      {group:'R32',teams:'Winner B vs Best 3rd',et:'11:00 PM',venue:'Vancouver'},
+    ]},
+    {date:'Friday 3 July',matches:[
+      {group:'R32',teams:'Runner-up D vs Runner-up G',et:'2:00 PM',venue:'Arlington'},
+      {group:'R32',teams:'Winner J vs Runner-up H',et:'6:00 PM',venue:'Miami'},
+      {group:'R32',teams:'Winner K vs Best 3rd',et:'9:30 PM',venue:'Kansas City'},
+    ]},
+  ]},
+  {stage:'ROUND OF 16', icon:'⚡', days:[
+    {date:'Saturday 4 July',matches:[
+      {group:'R16',teams:'R32 W1 vs R32 W3',et:'1:00 PM',venue:'Houston'},
+      {group:'R16',teams:'R32 W2 vs R32 W5',et:'5:00 PM',venue:'Philadelphia'},
+    ]},
+    {date:'Sunday 5 July',matches:[
+      {group:'R16',teams:'R32 W4 vs R32 W6',et:'4:00 PM',venue:'East Rutherford'},
+      {group:'R16',teams:'R32 W7 vs R32 W8',et:'8:00 PM',venue:'Mexico City'},
+    ]},
+    {date:'Monday 6 July',matches:[
+      {group:'R16',teams:'R32 W11 vs R32 W12',et:'3:00 PM',venue:'Arlington'},
+      {group:'R16',teams:'R32 W9 vs R32 W10',et:'8:00 PM',venue:'Seattle'},
+    ]},
+    {date:'Tuesday 7 July',matches:[
+      {group:'R16',teams:'R32 W14 vs R32 W16',et:'12:00 PM',venue:'Atlanta'},
+      {group:'R16',teams:'R32 W13 vs R32 W15',et:'4:00 PM',venue:'Vancouver'},
+    ]},
+  ]},
+  {stage:'QUARTER-FINALS', icon:'💥', days:[
+    {date:'Thursday 9 July',matches:[
+      {group:'QF',teams:'QF 1',et:'4:00 PM',venue:'Foxborough'},
+    ]},
+    {date:'Friday 10 July',matches:[
+      {group:'QF',teams:'QF 2',et:'3:00 PM',venue:'Inglewood'},
+    ]},
+    {date:'Saturday 11 July',matches:[
+      {group:'QF',teams:'QF 3',et:'5:00 PM',venue:'Miami'},
+      {group:'QF',teams:'QF 4',et:'9:00 PM',venue:'Kansas City'},
+    ]},
+  ]},
+  {stage:'SEMI-FINALS', icon:'🌟', days:[
+    {date:'Tuesday 14 July',matches:[
+      {group:'SF',teams:'Semi-Final 1',et:'3:00 PM',venue:'Arlington (Dallas)'},
+    ]},
+    {date:'Wednesday 15 July',matches:[
+      {group:'SF',teams:'Semi-Final 2',et:'3:00 PM',venue:'Atlanta'},
+    ]},
+  ]},
+  {stage:'FINAL', icon:'🏆', days:[
+    {date:'Saturday 18 July',matches:[
+      {group:'3PL',teams:'Third Place Match',et:'5:00 PM',venue:'Miami'},
+    ]},
+    {date:'Sunday 19 July',matches:[
+      {group:'FINAL',teams:'🏆 WORLD CUP FINAL',et:'3:00 PM',venue:'MetLife Stadium, New Jersey'},
+    ]},
+  ]},
+];
+
+// ── SUPABASE ──────────────────────────────────────────────────────────────────
+// KEY CHANGE: We only save to Supabase AFTER draw is complete (sw-done / gb-done)
+// This prevents late-joiners from seeing results before live viewers
+async function saveDrawToSupabase(type, data){
+  try{
+    await fetch(`${SUPABASE_URL}/rest/v1/draws`,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'apikey':SUPABASE_ANON_KEY,
+        'Authorization':`Bearer ${SUPABASE_ANON_KEY}`,
+        'Prefer':'resolution=merge-duplicates'
+      },
+      body:JSON.stringify({id:type, data:data})
+    });
+  } catch(e){ console.log('Supabase save failed:',e.message); }
+}
+
+async function checkSavedDraws(){
+  try{
+    const res=await fetch(`${SUPABASE_URL}/rest/v1/draws?select=id,data`,{
+      headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':`Bearer ${SUPABASE_ANON_KEY}`}
+    });
+    if(!res.ok) return;
+    const rows=await res.json();
+    if(!rows||rows.length===0) return;
+    document.getElementById('previewScreen').style.display='none';
+    document.getElementById('mainDivider').style.display='block';
+    rows.forEach(row=>{
+      const type=row.id; const d=row.data;
+      if(type==='sw'){
+        _swPlayers=d.players;_swOrder=d.playerOrder;
+        document.getElementById('sweepstakeResults').style.display='block';
+        document.getElementById('swDrawTimestamp').textContent='Drawn on '+d.timestamp;
+        document.getElementById('swStatusText').textContent='🏆 SWEEPSTAKE DRAW COMPLETE';
+        document.getElementById('swActionsRow').style.display='flex';
+        buildCompletedCards('sw',d.players,d.playerOrder);
+      } else if(type==='gb'){
+        _gbPlayers=d.players;_gbOrder=d.playerOrder;
+        document.getElementById('gbDivider').style.display='block';
+        document.getElementById('gbResults').style.display='block';
+        document.getElementById('gbDrawTimestamp').textContent='Drawn on '+d.timestamp;
+        document.getElementById('gbStatusText').textContent='🥅 GOLDEN BOOT DRAW COMPLETE';
+        document.getElementById('gbActionsRow').style.display='flex';
+        buildCompletedCards('gb',d.players,d.playerOrder);
+      }
+    });
+  } catch(e){ console.log('Supabase check failed:',e.message); }
+}
+
+function buildCompletedCards(type,players,playerOrder){
+  const grid=document.getElementById(type==='sw'?'swResultsGrid':'gbResultsGrid');
+  grid.innerHTML='';
+  playerOrder.forEach(pi=>{
+    const player=players[pi];
+    const card=document.createElement('div');
+    card.className='player-card visible';card.id=`${type}card-${pi}`;
+    const cat=getCatIcon(player.name);
+    const rows=player.slots.map(slot=>{
+      const extra=slot.odds?` <span class="gb-slot-meta">(${slot.country||''}) ${slot.odds}</span>`:'';
+      return `<li class="team-slot"><span class="seed-dot ${slot.seedCls}"></span><span class="slot-label">${slot.seedLabel}</span>${fimg(slot.code,'slot-flag')}<span class="team-name">${slot.name}${extra}</span></li>`;
+    }).join('');
+    card.innerHTML=`<div class="player-name">${esc(player.name)}${cat}</div><ul class="team-list">${rows}</ul>`;
+    grid.appendChild(card);
+  });
+}
+
+// ── PUSHER ────────────────────────────────────────────────────────────────────
+let pusher,channel;
+function initPusher(){
+  if(typeof Pusher==='undefined') return;
+  try{
+    pusher=new Pusher(PUSHER_KEY,{cluster:PUSHER_CLUSTER});
+    channel=pusher.subscribe('sweepstake');
+    channel.bind('sw-start',d=>showDrawArea('sw',d.players,d.playerOrder,d.timestamp));
+    channel.bind('sw-pick', d=>receivePick('sw',d));
+    channel.bind('sw-done', d=>finishDraw('sw',d));
+    channel.bind('gb-start',d=>showDrawArea('gb',d.players,d.playerOrder,d.timestamp));
+    channel.bind('gb-pick', d=>receivePick('gb',d));
+    channel.bind('gb-done', d=>finishDraw('gb',d));
+  } catch(e){ console.log('Pusher unavailable:',e.message); }
+}
+
+async function broadcast(action,data){
+  const pw=document.getElementById('hostPassword').value;
+  try{
+    const res=await fetch('/.netlify/functions/draw',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,data,password:pw})});
+    const json=await res.json();
+    if(json.error) document.getElementById('hostErr').textContent=json.error;
+  } catch(e){ document.getElementById('hostErr').textContent='Error: '+e.message; }
+}
+
+// ── BUILD UI ──────────────────────────────────────────────────────────────────
+function buildSeedsGrid(containerId,tiersData,showOdds){
+  const grid=document.getElementById(containerId);
+  if(!grid) return;
+  grid.innerHTML='';
+  tiersData.forEach(tier=>{
+    const card=document.createElement('div');
+    card.className=`seed-card ${tier.cls}`;
+    const items=tier.teams||tier.players||[];
+    const rows=items.map(t=>{
+      const odds=t.odds?`<span class="gb-odds">${t.odds}</span>`:'';
+      const country=t.country?` <span class="gb-country">(${t.country})</span>`:'';
+      return `<li>${fimg(t.code,'flag-sm')}<span>${t.name}${country}</span>${odds}</li>`;
+    }).join('');
+    card.innerHTML=`<div class="seed-title">${tier.label}</div><div class="seed-desc">${tier.desc}</div><ul class="seed-teams">${rows}</ul>`;
+    grid.appendChild(card);
+  });
+}
+
+function buildParticipants(){
+  const grid=document.getElementById('participantsGrid');
+  if(!grid) return;
+  grid.innerHTML='';
+  for(let i=0;i<12;i++){
+    const w=document.createElement('div');w.className='participant-input-wrap';
+    w.innerHTML=`<span class="participant-num">${i+1}</span><input class="participant-input" type="text" value="${DEFAULT_NAMES[i]}" maxlength="24" id="p${i+1}">`;
+    grid.appendChild(w);
+  }
+}
+
+function buildParticipantsDisplay(){
+  const el=document.getElementById('participantsDisplay');
+  if(!el) return;
+  el.innerHTML=DEFAULT_NAMES.map((name,i)=>{
+    const cat=name==='Echo'?' 🐈':name==='Espresso'?' 🐈‍⬛':'';
+    return `<div class="participant-chip"><span class="participant-chip-num">${i+1}</span>${esc(name)}${cat}</div>`;
+  }).join('');
+}
+
+function getNames(){ return Array.from({length:12},(_,i)=>{ const v=document.getElementById(`p${i+1}`).value.trim(); return v||`Player ${i+1}`; }); }
+
+// ── DRAW BUILDERS ─────────────────────────────────────────────────────────────
+function buildSweepstakeDraw(names){
+  const shuffled=SEEDS.map(s=>({...s,teams:shuffle(s.teams)}));
+  return names.map((name,i)=>({name,slots:[
+    {...shuffled[3].teams[i],seedCls:'s4',seedLabel:'SEED 4',seedId:4},
+    {...shuffled[2].teams[i],seedCls:'s3',seedLabel:'SEED 3',seedId:3},
+    {...shuffled[1].teams[i],seedCls:'s2',seedLabel:'SEED 2',seedId:2},
+    {...shuffled[0].teams[i],seedCls:'s1',seedLabel:'SEED 1',seedId:1},
+  ]}));
+}
+
+function buildGoldenBootDraw(names){
+  const shuffled=GB_TIERS.map(t=>({...t,players:shuffle(t.players)}));
+  return names.map((name,i)=>({name,slots:[
+    {...shuffled[3].players[i],seedCls:'s4',seedLabel:'TIER 4',seedId:4},
+    {...shuffled[2].players[i],seedCls:'s3',seedLabel:'TIER 3',seedId:3},
+    {...shuffled[1].players[i],seedCls:'s2',seedLabel:'TIER 2',seedId:2},
+    {...shuffled[0].players[i],seedCls:'s1',seedLabel:'TIER 1',seedId:1},
+  ]}));
+}
+
+// ── DRAW AREA ─────────────────────────────────────────────────────────────────
+let _swPlayers=[],_swOrder=[],_swData=null,_gbPlayers=[],_gbOrder=[],_gbData=null;
+
+function showDrawArea(type,players,playerOrder,timestamp){
+  document.getElementById('previewScreen').style.display='none';
+  document.getElementById('mainDivider').style.display='block';
+  if(type==='gb'){
+    document.getElementById('gbDivider').style.display='block';
+    document.getElementById('gbResults').style.display='block';
+    document.getElementById('gbDrawTimestamp').textContent='Drawn on '+timestamp;
+    _gbPlayers=players;_gbOrder=playerOrder;
+    _gbData={players,playerOrder,timestamp};
+    buildResultCards('gb',players,playerOrder);
+    setTimeout(()=>document.getElementById('golden-boot').scrollIntoView({behavior:'smooth',block:'start'}),200);
+    if(isHost) setTimeout(()=>drivePickSequence('gb',players,playerOrder,0),1500);
+  } else {
+    document.getElementById('sweepstakeResults').style.display='block';
+    document.getElementById('swDrawTimestamp').textContent='Drawn on '+timestamp;
+    _swPlayers=players;_swOrder=playerOrder;
+    _swData={players,playerOrder,timestamp};
+    buildResultCards('sw',players,playerOrder);
+    setTimeout(()=>document.getElementById('draw').scrollIntoView({behavior:'smooth',block:'start'}),200);
+    if(isHost) setTimeout(()=>drivePickSequence('sw',players,playerOrder,0),1500);
+  }
+}
+
+function buildResultCards(type,players,playerOrder){
+  const grid=document.getElementById(type==='sw'?'swResultsGrid':'gbResultsGrid');
+  grid.innerHTML='';
+  playerOrder.forEach(pi=>{
+    const player=players[pi];
+    const card=document.createElement('div');
+    card.className='player-card';card.id=`${type}card-${pi}`;
+    const cat=getCatIcon(player.name);
+    card.innerHTML=`<div class="player-name">${esc(player.name)}${cat}</div><ul class="team-list">${player.slots.map((_,si)=>`<li class="team-slot" id="${type}slot-${pi}-${si}"><span class="seed-dot empty"></span><span class="slot-label"></span><span class="slot-flag-empty"></span><span class="team-name empty">—</span></li>`).join('')}</ul>`;
+    grid.appendChild(card);
+  });
+  playerOrder.forEach((pi,i)=>setTimeout(()=>document.getElementById(`${type}card-${pi}`).classList.add('visible'),60*i));
+}
+
+// ── HOST DRIVES ───────────────────────────────────────────────────────────────
+async function drivePickSequence(type,players,playerOrder,startIdx){
+  const total=48; // 12 players × 4 seeds
+  if(startIdx>=total){
+    // Wait for last suspense animation, then broadcast done WITH the draw data
+    const doneDelay=SUSPENSE_ANNOUNCE+SUSPENSE_ELLIPSIS+1000;
+    const data=type==='sw'?_swData:_gbData;
+    setTimeout(async()=>{ await broadcast(`${type}-done`,{drawData:data}); },doneDelay);
+    return;
+  }
+  const slot=Math.floor(startIdx/12);
+  const pi=playerOrder[startIdx%12];
+  const team=players[pi].slots[slot];
+  await broadcast(`${type}-pick`,{pi,slot,player:team});
+  const delay=team.seedId<=2?SUSPENSE_ANNOUNCE+SUSPENSE_ELLIPSIS+SUSPENSE_REVEAL+1200:NORMAL_DELAY;
+  setTimeout(()=>drivePickSequence(type,players,playerOrder,startIdx+1),delay);
+}
+
+// ── RECEIVE PICK ──────────────────────────────────────────────────────────────
+function receivePick(type,data){
+  const {pi,slot,player}=data;
+  const slotEl=document.getElementById(`${type}slot-${pi}-${slot}`);
+  const pfx=type==='sw'?'sw':'gb';
+  const statusEl=document.getElementById(`${pfx}DrawStatus`);
+  const statusFlag=document.getElementById(`${pfx}StatusFlag`);
+  const statusText=document.getElementById(`${pfx}StatusText`);
+  const ellWrap=document.getElementById(`${pfx}EllipsisWrap`);
+  const players=type==='sw'?_swPlayers:_gbPlayers;
+  const pname=players[pi]?players[pi].name:'';
+  const seedId=player.seedId;
+  const teamDisplay=player.country?`${player.name} (${player.country})`:player.name;
+
+  if(seedId<=2){
+    statusEl.className=`draw-status ${player.seedCls}`;
+    statusFlag.classList.remove('show');ellWrap.style.display='none';
+    statusText.textContent=`${player.seedLabel} — ${pname} draws...`;
+    setTimeout(()=>{ ellWrap.style.display='flex'; },SUSPENSE_ANNOUNCE);
+    setTimeout(()=>{
+      ellWrap.style.display='none';
+      statusFlag.src=furl(player.code);statusFlag.classList.add('show');
+      statusText.innerHTML=`<span class="team-slam">${player.name.toUpperCase()}!</span>`;
+      revealSlot(slotEl,player);
+    },SUSPENSE_ANNOUNCE+SUSPENSE_ELLIPSIS);
+  } else {
+    statusEl.className=`draw-status ${player.seedCls}`;
+    ellWrap.style.display='none';statusFlag.src=furl(player.code);statusFlag.classList.add('show');
+    statusText.textContent=`${player.seedLabel} — ${pname} draws ${teamDisplay}`;
+    revealSlot(slotEl,player);
+  }
+}
+
+function revealSlot(slotEl,player){
+  if(!slotEl) return;
+  const extra=player.odds?` <span class="gb-slot-meta">(${player.country||''}) ${player.odds}</span>`:'';
+  slotEl.innerHTML=`<span class="seed-dot ${player.seedCls}"></span><span class="slot-label">${player.seedLabel}</span>${fimg(player.code,'slot-flag')}<span class="team-name">${player.name}${extra}</span>`;
+  slotEl.classList.add('just-added');
+  setTimeout(()=>slotEl.classList.remove('just-added'),450);
+}
+
+// ── FINISH ────────────────────────────────────────────────────────────────────
+function finishDraw(type,data){
+  const pfx=type==='sw'?'sw':'gb';
+  const statusEl=document.getElementById(`${pfx}DrawStatus`);
+  const statusFlag=document.getElementById(`${pfx}StatusFlag`);
+  const statusText=document.getElementById(`${pfx}StatusText`);
+  const ellWrap=document.getElementById(`${pfx}EllipsisWrap`);
+  const actionsId=type==='sw'?'swActionsRow':'gbActionsRow';
+  const msg=type==='sw'?'🏆 SWEEPSTAKE DRAW COMPLETE':'🥅 GOLDEN BOOT DRAW COMPLETE';
+  ellWrap.style.display='none';
+  statusEl.className='draw-status s1';statusFlag.classList.remove('show');
+  statusText.textContent=msg;
+  document.getElementById(actionsId).style.display='flex';
+  launchConfetti();
+  // Save to Supabase NOW — after draw completes, so late-joiners don't get ahead
+  if(data&&data.drawData){
+    saveDrawToSupabase(type,data.drawData);
+  }
+}
+
+// ── PERMANENT LINKS ───────────────────────────────────────────────────────────
+function makePermanentLink(cardPrefix,paramName){
+  const cards=[...document.querySelectorAll(`[id^="${cardPrefix}"]`)];
+  const encoded=cards.map(card=>{
+    const name=encodeURIComponent(card.querySelector('.player-name').textContent);
+    const slots=[...card.querySelectorAll('.team-slot')].map(sl=>encodeURIComponent(sl.querySelector('.team-name').textContent)).join(',');
+    return name+':'+slots;
+  }).join('|');
+  return window.location.origin+window.location.pathname+'?'+paramName+'='+encoded;
+}
+
+function loadPermanentResults(encoded,type){
+  const labels=type==='sw'?['SEED 4','SEED 3','SEED 2','SEED 1']:['TIER 4','TIER 3','TIER 2','TIER 1'];
+  const cls=['s4','s3','s2','s1'];
+  document.getElementById('previewScreen').style.display='none';
+  document.getElementById('mainDivider').style.display='block';
+  const resultsId=type==='sw'?'sweepstakeResults':'gbResults';
+  document.getElementById(resultsId).style.display='block';
+  document.getElementById(type==='sw'?'swDrawTimestamp':'gbDrawTimestamp').textContent='Official Radford World Cup 2026 Draw';
+  document.getElementById(type==='sw'?'swActionsRow':'gbActionsRow').style.display='flex';
+  document.getElementById(type==='sw'?'swStatusText':'gbStatusText').textContent=type==='sw'?'🏆 SWEEPSTAKE DRAW COMPLETE':'🥅 GOLDEN BOOT DRAW COMPLETE';
+  if(type==='gb'){ document.getElementById('gbDivider').style.display='block'; }
+  const grid=document.getElementById(type==='sw'?'swResultsGrid':'gbResultsGrid');
+  grid.innerHTML='';
+  encoded.split('|').forEach(p=>{
+    const [name,teamsStr]=p.split(':');
+    const teams=teamsStr.split(',').map(t=>decodeURIComponent(t));
+    const card=document.createElement('div');card.className='player-card visible';
+    const rows=teams.map((t,si)=>`<li class="team-slot"><span class="seed-dot ${cls[si]}"></span><span class="slot-label">${labels[si]}</span><span class="slot-flag-empty"></span><span class="team-name">${esc(t)}</span></li>`).join('');
+    card.innerHTML=`<div class="player-name">${esc(decodeURIComponent(name))}</div><ul class="team-list">${rows}</ul>`;
+    grid.appendChild(card);
+  });
+}
+
+// ── FIXTURES ──────────────────────────────────────────────────────────────────
+function buildFixtures(){
+  const container=document.getElementById('fixturesContainer');
+  const filterBar=document.getElementById('fixturesFilter');
+  if(!container||!filterBar) return;
+
+  // Build filter buttons
+  const allBtn=document.createElement('button');
+  allBtn.className='filter-btn active';allBtn.textContent='ALL';
+  allBtn.onclick=()=>filterFixtures('ALL',allBtn);
+  filterBar.appendChild(allBtn);
+  FIXTURES.forEach(stage=>{
+    const btn=document.createElement('button');
+    btn.className='filter-btn';btn.textContent=stage.stage;
+    btn.onclick=()=>filterFixtures(stage.stage,btn);
+    filterBar.appendChild(btn);
+  });
+
+  // Build fixture HTML
+  let html='';
+  FIXTURES.forEach(stage=>{
+    html+=`<div class="fixtures-stage" data-stage="${stage.stage}">`;
+    html+=`<div class="fixtures-stage-title">${stage.icon} ${stage.stage}</div>`;
+    stage.days.forEach(day=>{
+      html+=`<div class="fixtures-day">`;
+      html+=`<div class="fixtures-day-header">${day.date}</div>`;
+      day.matches.forEach(m=>{
+        const bst=etToBst(m.et);
+        html+=`<div class="match-row">
+          <div class="match-teams-cell">
+            <div class="match-teams">${esc(m.teams)}</div>
+            <span class="match-group-badge">Group ${m.group}</span>
+          </div>
+          <div class="match-time-cell">
+            <div class="match-time-bst">${bst}</div>
+            <div class="match-time-label">BST</div>
+          </div>
+          <div class="match-venue-cell">${esc(m.venue)}</div>
+        </div>`;
+      });
+      html+=`</div>`;
+    });
+    html+=`</div>`;
+  });
+  container.innerHTML=html;
+}
+
+function filterFixtures(stageName, clickedBtn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  clickedBtn.classList.add('active');
+  document.querySelectorAll('.fixtures-stage').forEach(el=>{
+    el.style.display=(stageName==='ALL'||el.dataset.stage===stageName)?'block':'none';
+  });
+}
+
+// ── CONFETTI ──────────────────────────────────────────────────────────────────
+function launchConfetti(){
+  const canvas=document.getElementById('confetti-canvas');
+  const ctx=canvas.getContext('2d');
+  canvas.width=window.innerWidth;canvas.height=window.innerHeight;
+  const colors=['#f5c842','#4ade80','#60a5fa','#fb923c','#a78bfa','#f472b6','#fff'];
+  const particles=Array.from({length:180},()=>({x:Math.random()*canvas.width,y:-20,r:Math.random()*6+3,d:Math.random()*4+2,color:colors[Math.floor(Math.random()*colors.length)],tiltAngle:0,tiltSpeed:Math.random()*0.07+0.05,shape:Math.random()>0.5?'rect':'circle'}));
+  let frame=0;
+  function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);particles.forEach(p=>{p.tiltAngle+=p.tiltSpeed;p.y+=p.d;p.x+=Math.sin(p.tiltAngle)*1.5;ctx.fillStyle=p.color;if(p.shape==='circle'){ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();}else{ctx.save();ctx.translate(p.x,p.y);ctx.rotate(Math.sin(p.tiltAngle)*0.2);ctx.fillRect(-p.r,-p.r/2,p.r*2,p.r);ctx.restore();}});frame++;if(frame<200)requestAnimationFrame(draw);else ctx.clearRect(0,0,canvas.width,canvas.height);}
+  draw();
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded',function(){
+  initPusher();
+  const _params=new URLSearchParams(window.location.search);
+  if(!_params.get('draw')&&!_params.get('gb')&&!isHost) checkSavedDraws();
+
+  buildSeedsGrid('seedsGridPreview',SEEDS,false);
+  buildSeedsGrid('gbTiersGridPreview',GB_TIERS,true);
+  buildParticipantsDisplay();
+  buildFixtures();
+
+  if(isHost){
+    document.getElementById('hostPanel').style.display='block';
+    document.getElementById('setupSection').style.display='block';
+    document.getElementById('previewScreen').style.display='none';
+    buildSeedsGrid('seedsGrid',SEEDS,false);
+    buildParticipants();
+  }
+
+  const params=new URLSearchParams(window.location.search);
+  if(params.get('draw')) loadPermanentResults(params.get('draw'),'sw');
+  if(params.get('gb'))   loadPermanentResults(params.get('gb'),'gb');
+
+  // Start sweepstake
+  document.getElementById('startSweepstakeBtn')&&document.getElementById('startSweepstakeBtn').addEventListener('click',async function(){
+    const names=getNames();
+    if(new Set(names.map(n=>n.toLowerCase())).size<12){document.getElementById('hostErr').textContent='Each player needs a unique name.';return;}
+    this.disabled=true;this.textContent='RUNNING...';
+    const players=buildSweepstakeDraw(names);
+    const playerOrder=shuffle([...Array(12).keys()]);
+    const timestamp=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+' at '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+    await broadcast('sw-start',{players,playerOrder,timestamp});
+  });
+
+  // Start golden boot
+  document.getElementById('startGoldenBootBtn')&&document.getElementById('startGoldenBootBtn').addEventListener('click',async function(){
+    const names=getNames();
+    this.disabled=true;this.textContent='RUNNING...';
+    const players=buildGoldenBootDraw(names);
+    const playerOrder=shuffle([...Array(12).keys()]);
+    const timestamp=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+' at '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+    await broadcast('gb-start',{players,playerOrder,timestamp});
+  });
+
+  // Reset
+  document.getElementById('resetDrawBtn')&&document.getElementById('resetDrawBtn').addEventListener('click',async function(){
+    if(!confirm('Delete the saved draw and reset for everyone?')) return;
+    this.disabled=true;this.textContent='RESETTING...';
+    const pw=document.getElementById('hostPassword').value;
+    try{
+      const res=await fetch('/.netlify/functions/draw',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'reset',data:{},password:pw})});
+      const json=await res.json();
+      if(json.error){document.getElementById('hostErr').textContent=json.error;this.disabled=false;this.textContent='🗑 RESET DRAW';return;}
+      window.location.reload();
+    } catch(e){ document.getElementById('hostErr').textContent='Reset failed: '+e.message;this.disabled=false;this.textContent='🗑 RESET DRAW'; }
+  });
+
+  // Permanent links
+  document.getElementById('swPermLinkBtn')&&document.getElementById('swPermLinkBtn').addEventListener('click',function(){
+    navigator.clipboard.writeText(makePermanentLink('swcard-','draw')).then(()=>{this.textContent='✓ Copied!';setTimeout(()=>this.textContent='🔗 Permanent link',2500);});
+  });
+  document.getElementById('gbPermLinkBtn')&&document.getElementById('gbPermLinkBtn').addEventListener('click',function(){
+    navigator.clipboard.writeText(makePermanentLink('gbcard-','gb')).then(()=>{this.textContent='✓ Copied!';setTimeout(()=>this.textContent='🔗 Permanent link',2500);});
+  });
+
+  // Copy results
+  function copyResults(cardPrefix,title){
+    const cards=[...document.querySelectorAll(`[id^="${cardPrefix}"]`)];
+    let text=`${title}\n${'═'.repeat(44)}\n\n`;
+    cards.forEach(card=>{
+      const name=card.querySelector('.player-name').textContent;
+      const slots=[...card.querySelectorAll('.team-slot')].map(sl=>`  ${sl.querySelector('.slot-label').textContent}: ${sl.querySelector('.team-name').textContent}`).filter(s=>!s.includes('—'));
+      text+=`${name}\n${slots.join('\n')}\n\n`;
+    });
+    navigator.clipboard.writeText(text);
+  }
+  document.getElementById('swCopyBtn')&&document.getElementById('swCopyBtn').addEventListener('click',function(){copyResults('swcard-','⚽ RADFORD WORLD CUP 2026 SWEEPSTAKE');this.textContent='✓ Copied!';setTimeout(()=>this.textContent='📋 Copy results',2000);});
+  document.getElementById('gbCopyBtn')&&document.getElementById('gbCopyBtn').addEventListener('click',function(){copyResults('gbcard-','🥅 RADFORD GOLDEN BOOT DRAW 2026');this.textContent='✓ Copied!';setTimeout(()=>this.textContent='📋 Copy results',2000);});
+});
+</script>
+</body>
+</html>
