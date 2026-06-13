@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Radford World Cup Sweepstake 2026</title>
+<title>The Radford-Harris World Cup Sweepstake 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -253,7 +253,7 @@
   <!-- HEADER -->
   <header>
     <div class="badge">FIFA ⚽ 2026</div>
-    <h1>THE RADFORD<br><span>WORLD CUP SWEEPSTAKE</span></h1>
+    <h1>THE RADFORD-HARRIS<br><span>WORLD CUP SWEEPSTAKE</span></h1>
     <p class="treasurer">Treasurer: Thea</p>
     <p class="draw-time">⏰ Live draw begins <strong>5:00 PM BST</strong> · Thursday 11 June</p>
     <p class="subtitle">12 players &nbsp;·&nbsp; 4 teams each &nbsp;·&nbsp; 4 Golden Boot contenders each &nbsp;·&nbsp; 48 teams</p>
@@ -1037,7 +1037,7 @@ function loadPermanentResults(encoded,type){
   document.getElementById('mainDivider').style.display='block';
   const resultsId=type==='sw'?'sweepstakeResults':'gbResults';
   document.getElementById(resultsId).style.display='block';
-  document.getElementById(type==='sw'?'swDrawTimestamp':'gbDrawTimestamp').textContent='Official Radford World Cup 2026 Draw';
+  document.getElementById(type==='sw'?'swDrawTimestamp':'gbDrawTimestamp').textContent='Official Radford-Harris World Cup 2026 Draw';
   document.getElementById(type==='sw'?'swActionsRow':'gbActionsRow').style.display='flex';
   document.getElementById(type==='sw'?'swStatusText':'gbStatusText').textContent=type==='sw'?'🏆 SWEEPSTAKE DRAW COMPLETE':'🥅 GOLDEN BOOT DRAW COMPLETE';
   if(type==='gb'){ document.getElementById('gbDivider').style.display='block'; }
@@ -1419,8 +1419,8 @@ window.addEventListener('DOMContentLoaded',function(){
     });
     navigator.clipboard.writeText(text);
   }
-  document.getElementById('swCopyBtn')&&document.getElementById('swCopyBtn').addEventListener('click',function(){copyResults('swcard-','⚽ RADFORD WORLD CUP 2026 SWEEPSTAKE');this.textContent='✓ Copied!';setTimeout(()=>this.textContent='📋 Copy results',2000);});
-  document.getElementById('gbCopyBtn')&&document.getElementById('gbCopyBtn').addEventListener('click',function(){copyResults('gbcard-','🥅 RADFORD GOLDEN BOOT DRAW 2026');this.textContent='✓ Copied!';setTimeout(()=>this.textContent='📋 Copy results',2000);});
+  document.getElementById('swCopyBtn')&&document.getElementById('swCopyBtn').addEventListener('click',function(){copyResults('swcard-','⚽ RADFORD-HARRIS WORLD CUP 2026 SWEEPSTAKE');this.textContent='✓ Copied!';setTimeout(()=>this.textContent='📋 Copy results',2000);});
+  document.getElementById('gbCopyBtn')&&document.getElementById('gbCopyBtn').addEventListener('click',function(){copyResults('gbcard-','🥅 RADFORD-HARRIS GOLDEN BOOT DRAW 2026');this.textContent='✓ Copied!';setTimeout(()=>this.textContent='📋 Copy results',2000);});
 });
 </script>
 </body>
