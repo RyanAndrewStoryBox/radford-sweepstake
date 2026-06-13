@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Radford-Harris World Cup Sweepstake 2026</title>
+<title>The Radford World Cup Sweepstake 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -253,9 +253,9 @@
   <!-- HEADER -->
   <header>
     <div class="badge">FIFA ⚽ 2026</div>
-    <h1>THE RADFORD-HARRIS<br><span>WORLD CUP SWEEPSTAKE</span></h1>
+    <h1>THE RADFORD<br><span>WORLD CUP SWEEPSTAKE</span></h1>
     <p class="treasurer">Treasurer: Thea</p>
-    <p class="draw-time">⏰ Live draw begins <strong>6:30 PM BST</strong> · Thursday 11 June</p>
+    <p class="draw-time">⏰ Live draw begins <strong>5:00 PM BST</strong> · Thursday 11 June</p>
     <p class="subtitle">12 players &nbsp;·&nbsp; 4 teams each &nbsp;·&nbsp; 4 Golden Boot contenders each &nbsp;·&nbsp; 48 teams</p>
     <div class="prize-grid">
       <div class="prize-card">
@@ -301,7 +301,7 @@
     <div class="divider"></div>
     <div class="waiting-box">
       <div class="waiting-title">⚽ Waiting for the draw to begin...</div>
-      <p class="waiting-sub">The host will start the live draw at 6:30 PM BST · Thursday 11 June</p>
+      <p class="waiting-sub">The host will start the live draw at 5:00 PM BST · Thursday 11 June</p>
       <div><span class="pulse"></span><span class="pulse"></span><span class="pulse"></span></div>
     </div>
     <div class="divider"></div>
@@ -526,7 +526,7 @@ const GB_TIERS = [
 ];
 
 // ── PARTICIPANTS ──────────────────────────────────────────────────────────────
-const DEFAULT_NAMES = ['Alistair','Cathie','Doug','Echo','Espresso','Izzie','Jon','Millie','Ollie','Patrick','Ryan','Thea'];
+const DEFAULT_NAMES = ['Alistair','Cathy','Doug','Echo','Espresso','Izzy','John','Millie','Ollie','Patrick','Ryan','Thea'];
 const CAT_NAMES = {
   'Echo': '🟤', // brown/red cat
   'Espresso': '⬛', // black cat
@@ -1037,7 +1037,7 @@ function loadPermanentResults(encoded,type){
   document.getElementById('mainDivider').style.display='block';
   const resultsId=type==='sw'?'sweepstakeResults':'gbResults';
   document.getElementById(resultsId).style.display='block';
-  document.getElementById(type==='sw'?'swDrawTimestamp':'gbDrawTimestamp').textContent='Official Radford-Harris World Cup 2026 Draw';
+  document.getElementById(type==='sw'?'swDrawTimestamp':'gbDrawTimestamp').textContent='Official Radford World Cup 2026 Draw';
   document.getElementById(type==='sw'?'swActionsRow':'gbActionsRow').style.display='flex';
   document.getElementById(type==='sw'?'swStatusText':'gbStatusText').textContent=type==='sw'?'🏆 SWEEPSTAKE DRAW COMPLETE':'🥅 GOLDEN BOOT DRAW COMPLETE';
   if(type==='gb'){ document.getElementById('gbDivider').style.display='block'; }
@@ -1195,6 +1195,21 @@ function setLbTab(tab){
 window.setLbTab = setLbTab;
 
 function renderCountryTracker(){
+  // Map draw names to football-data.org API names where they differ
+  const NAME_ALIASES = {
+    'bosnia & herz.': 'bosnia and herzegovina',
+    'cabo verde': 'cape verde islands',
+    'curaçao': 'curacao',
+    'türkiye': 'turkey',
+    'south korea': 'korea republic',
+    'usa': 'united states',
+    'dr congo': 'congo dr',
+  };
+  // Handle Ivory Coast separately due to apostrophe
+  function getAlias(key){
+    if(key.includes('ivoire')) return 'ivory coast';
+    return NAME_ALIASES[key] || key;
+  }
   // Build a lookup: team name (lowercase) -> group standing row
   const teamLookup = {};
   if(_lbStandings?.groups){
@@ -1216,7 +1231,12 @@ function renderCountryTracker(){
     return '<p style="color:var(--muted);font-size:13px;text-align:center;padding:20px">Draw results not yet available.</p>';
   }
 
-  let html = '<div class="lb-player-grid">';
+  let html = '<div style="display:flex;gap:16px;margin-bottom:16px;flex-wrap:wrap">' +
+    '<span style="font-size:11px;color:var(--s2);font-weight:600">● Qualified / Still in</span>' +
+    '<span style="font-size:11px;color:var(--muted);font-weight:600">● Bottom half / Eliminated</span>' +
+    '<span style="font-size:11px;color:var(--gold);font-weight:600">● Winner</span>' +
+    '</div>' +
+    '<div class="lb-player-grid">';
 
   _swPlayers.forEach(player => {
     if(!player) return;
@@ -1227,9 +1247,10 @@ function renderCountryTracker(){
       const teamName = slot.name;
       const code = slot.code;
       const teamKey = teamName.toLowerCase();
+      const aliasKey = getAlias(teamKey);
 
       // Check knockout status first
-      const knockoutStatus = knockout[teamName] || knockout[Object.keys(knockout).find(k => k.toLowerCase() === teamKey)];
+      const knockoutStatus = knockout[teamName] || knockout[Object.keys(knockout).find(k => k.toLowerCase() === teamKey || k.toLowerCase() === aliasKey)];
 
       let statusHtml = '';
       let statusClass = 'still-in';
@@ -1248,15 +1269,16 @@ function renderCountryTracker(){
         statusClass = 'still-in';
       } else {
         // Group stage — show position
-        const standing = teamLookup[teamKey];
+        const standing = teamLookup[teamKey] || teamLookup[aliasKey];
         if(standing){
           const pos = standing.groupPos;
           const pts = standing.points;
           const gd = standing.goalDifference >= 0 ? '+'+standing.goalDifference : standing.goalDifference;
-          statusText = `${standing.groupName} · P${pos} · ${pts}pts · GD${gd}`;
+          const posLabel = pos === 1 ? '1st' : pos === 2 ? '2nd' : pos === 3 ? '3rd' : '4th';
+          statusText = `Grp ${standing.groupName.replace('GROUP_','').replace('GROUP ','')} · ${posLabel} · ${pts}pts · GD${gd}`;
           statusClass = pos <= 2 ? 'still-in' : 'eliminated';
         } else {
-          statusText = 'Group stage';
+          statusText = 'Playing';
           statusClass = 'still-in';
         }
       }
@@ -1299,7 +1321,7 @@ function renderGoldenBoot(){
     const goals = scorer.goals || 0;
     const country = scorer.team?.name || '';
     const nameKey = name.toLowerCase();
-    const owner = ownerLookup[nameKey] || Object.entries(ownerLookup).find(([k]) => nameKey.includes(k.split(' ')[1]?.toLowerCase()||''))?.[1] || null;
+    const owner = ownerLookup[nameKey] || null;
     const isHighlighted = !!owner;
     const isLeader = idx === 0 && goals > 0;
 
@@ -1397,8 +1419,8 @@ window.addEventListener('DOMContentLoaded',function(){
     });
     navigator.clipboard.writeText(text);
   }
-  document.getElementById('swCopyBtn')&&document.getElementById('swCopyBtn').addEventListener('click',function(){copyResults('swcard-','⚽ RADFORD-HARRIS WORLD CUP 2026 SWEEPSTAKE');this.textContent='✓ Copied!';setTimeout(()=>this.textContent='📋 Copy results',2000);});
-  document.getElementById('gbCopyBtn')&&document.getElementById('gbCopyBtn').addEventListener('click',function(){copyResults('gbcard-','🥅 RADFORD-HARRIS GOLDEN BOOT DRAW 2026');this.textContent='✓ Copied!';setTimeout(()=>this.textContent='📋 Copy results',2000);});
+  document.getElementById('swCopyBtn')&&document.getElementById('swCopyBtn').addEventListener('click',function(){copyResults('swcard-','⚽ RADFORD WORLD CUP 2026 SWEEPSTAKE');this.textContent='✓ Copied!';setTimeout(()=>this.textContent='📋 Copy results',2000);});
+  document.getElementById('gbCopyBtn')&&document.getElementById('gbCopyBtn').addEventListener('click',function(){copyResults('gbcard-','🥅 RADFORD GOLDEN BOOT DRAW 2026');this.textContent='✓ Copied!';setTimeout(()=>this.textContent='📋 Copy results',2000);});
 });
 </script>
 </body>
