@@ -1219,8 +1219,14 @@ function renderCountryTracker(){
       group.table.forEach((row, idx) => {
         const name = row.team?.name?.toLowerCase() || '';
         const shortName = row.team?.shortName?.toLowerCase() || '';
-        teamLookup[name] = { ...row, groupPos: idx+1, groupName: group.group };
-        if(shortName) teamLookup[shortName] = { ...row, groupPos: idx+1, groupName: group.group };
+        // Also store normalised (accent-stripped) versions
+        const nameNorm = name.normalize('NFD').replace(/[̀-ͯ]/g,'');
+        const shortNorm = shortName.normalize('NFD').replace(/[̀-ͯ]/g,'');
+        const entry = { ...row, groupPos: idx+1, groupName: group.group };
+        teamLookup[name] = entry;
+        teamLookup[nameNorm] = entry;
+        if(shortName) teamLookup[shortName] = entry;
+        if(shortNorm) teamLookup[shortNorm] = entry;
       });
     });
   }
@@ -1269,25 +1275,11 @@ function renderCountryTracker(){
         statusText = `✅ ${knockoutStatus.reached}`;
         statusClass = 'still-in';
       } else {
-        const standing = teamLookup[teamKey] || teamLookup[aliasKey];
-        if(standing){
-          const pos = standing.groupPos;
-          const pts = standing.points;
-          const gd = standing.goalDifference >= 0 ? '+'+standing.goalDifference : standing.goalDifference;
-          const posLabel = pos === 1 ? '1st' : pos === 2 ? '2nd' : pos === 3 ? '3rd' : '4th';
-          if(pos > 2){
-            // Finished bottom half of group — definitely out
-            statusClass = 'eliminated';
-            statusText = `Out · Group stage (${posLabel})`;
-          } else {
-            // Finished top 2 — still in unless proven otherwise by knockout data
-            statusClass = 'still-in';
-            statusText = `Grp ${standing.groupName.replace('GROUP_','').replace('GROUP ','')} · ${posLabel} · ${pts}pts`;
-          }
-        } else {
-          statusText = 'Still in';
-          statusClass = 'still-in';
-        }
+        // No knockout entry — default to still in
+        // We cannot reliably determine elimination from group position alone
+        // in a 48-team tournament with best 3rd-place qualifiers
+        statusText = 'Still in';
+        statusClass = 'still-in';
       }
 
       html += `<div class="lb-team-row">
