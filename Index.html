@@ -1275,9 +1275,27 @@ function renderCountryTracker(){
         statusText = `✅ ${knockoutStatus.reached}`;
         statusClass = 'still-in';
       } else {
-        // Not in knockout data = still in
-        statusText = 'Still in';
-        statusClass = 'still-in';
+        // Not in knockout data — check group position
+        const standing = teamLookup[teamKey] || teamLookup[aliasKey];
+        if (standing) {
+          const pos = standing.groupPos;
+          const pts = standing.points;
+          const posLabel = pos === 1 ? '1st' : pos === 2 ? '2nd' : pos === 3 ? '3rd' : '4th';
+          const grpName = standing.groupName.replace('GROUP_','').replace('GROUP ','');
+          // 3rd and 4th place teams not in knockout data = eliminated in group stage
+          // (only 8 best 3rd place teams qualified for R32)
+          if (pos >= 3) {
+            statusClass = 'eliminated';
+            statusText = `Out · Group stage (${posLabel})`;
+          } else {
+            // 1st/2nd not yet in knockout data = still in (haven't played R32 yet)
+            statusClass = 'still-in';
+            statusText = `Grp ${grpName} · ${posLabel} · ${pts}pts`;
+          }
+        } else {
+          statusClass = 'still-in';
+          statusText = 'Still in';
+        }
       }
 
       html += `<div class="lb-team-row">
