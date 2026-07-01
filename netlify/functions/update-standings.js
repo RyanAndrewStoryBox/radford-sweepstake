@@ -1,7 +1,4 @@
 // ── update-standings.js ───────────────────────────────────────────────────────
-// Called by cron-job.org every 2 hours during the tournament.
-// Fetches standings + scorers from football-data.org and writes to Supabase.
-
 const COMPETITION_ID = 2000; // FIFA World Cup
 
 exports.handler = async function(event, context) {
@@ -58,26 +55,37 @@ exports.handler = async function(event, context) {
     );
     const matchesData = matchesRes.ok ? await matchesRes.json() : { matches: [] };
 
-    // Build knockout progress map: teamName -> status
+    // Log all unique stages seen in the API for debugging
+    const seenStages = [...new Set((matchesData.matches || []).map(m => m.stage))];
+    console.log('Stages seen in API:', seenStages);
+
+    // Build knockout progress map — cast a wide net on stage names
     const knockoutProgress = {};
-    const knockoutStages = ['ROUND_OF_32','ROUND_OF_16','QUARTER_FINALS','SEMI_FINALS','THIRD_PLACE','FINAL'];
-    const stageLabels = {
-      'ROUND_OF_32': 'Round of 32',
-      'ROUND_OF_16': 'Round of 16',
+    const knockoutStageMap = {
+      'ROUND_OF_32':    'Round of 32',
+      'LAST_32':        'Round of 32',
+      'ROUND_OF_16':    'Round of 16',
+      'LAST_16':        'Round of 16',
       'QUARTER_FINALS': 'Quarter-Final',
-      'SEMI_FINALS': 'Semi-Final',
-      'THIRD_PLACE': 'Third Place',
-      'FINAL': 'Final'
+      'QUARTER_FINAL':  'Quarter-Final',
+      'SEMI_FINALS':    'Semi-Final',
+      'SEMI_FINAL':     'Semi-Final',
+      'THIRD_PLACE':    'Third Place',
+      'THIRD_PLACE_MATCH': 'Third Place',
+      'FINAL':          'Final',
     };
 
     if (matchesData.matches) {
       matchesData.matches.forEach(match => {
-        if (!knockoutStages.includes(match.stage)) return;
+        const stageLabel = knockoutStageMap[match.stage];
+        if (!stageLabel) return; // skip group stage matches
         if (match.status !== 'FINISHED') return;
+
         const homeTeam = match.homeTeam.name;
         const awayTeam = match.awayTeam.name;
         const homeGoals = match.score.fullTime.home;
         const awayGoals = match.score.fullTime.away;
+
         let winner, loser;
         if (homeGoals !== awayGoals) {
           winner = homeGoals > awayGoals ? homeTeam : awayTeam;
@@ -85,14 +93,19 @@ exports.handler = async function(event, context) {
         } else {
           const homePen = match.score.penalties?.home || 0;
           const awayPen = match.score.penalties?.away || 0;
-          winner = homePen > awayPen ? homeTeam : awayTeam;
-          loser  = homePen > awayPen ? awayTeam : homeTeam;
+          winner = homePen >= awayPen ? homeTeam : awayTeam;
+          loser  = homePen >= awayPen ? awayTeam : homeTeam;
         }
-        const label = stageLabels[match.stage] || match.stage;
-        knockoutProgress[loser]  = { eliminatedAt: label };
-        knockoutProgress[winner] = { reached: label };
+
+        knockoutProgress[loser]  = { eliminatedAt: stageLabel };
+        // Only update winner if not already eliminated in a later round
+        if (!knockoutProgress[winner]?.eliminatedAt) {
+          knockoutProgress[winner] = { reached: stageLabel };
+        }
       });
     }
+
+    console.log('Knockout progress:', JSON.stringify(knockoutProgress));
 
     // Save to Supabase
     await fetch(`${SUPABASE_URL}/rest/v1/standings`, {
@@ -102,6 +115,7 @@ exports.handler = async function(event, context) {
         data: {
           groups: standingsData.standings || [],
           knockoutProgress,
+          seenStages, // store for debugging
           updatedAt: new Date().toISOString()
         }
       })
@@ -124,7 +138,8 @@ exports.handler = async function(event, context) {
         ok: true,
         groups: standingsData.standings?.length || 0,
         scorers: scorersData.scorers?.length || 0,
-        knockoutTeams: Object.keys(knockoutProgress).length
+        knockoutTeams: Object.keys(knockoutProgress).length,
+        seenStages
       })
     };
 
