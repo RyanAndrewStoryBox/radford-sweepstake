@@ -1322,7 +1322,9 @@ function renderGoldenBoot(){
     const goals = scorer.goals || 0;
     const country = scorer.team?.name || '';
     const nameKey = name.toLowerCase();
-    const owner = ownerLookup[nameKey] || null;
+    // Normalise accented characters for matching (e.g. Mbappé -> Mbappe)
+    const nameNorm = nameKey.normalize('NFD').replace(/[̀-ͯ]/g, '');
+    const owner = ownerLookup[nameKey] || ownerLookup[nameNorm] || null;
     const isHighlighted = !!owner;
     const isLeader = idx === 0 && goals > 0;
 
