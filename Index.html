@@ -1275,25 +1275,9 @@ function renderCountryTracker(){
         statusText = `✅ ${knockoutStatus.reached}`;
         statusClass = 'still-in';
       } else {
-        const standing = teamLookup[teamKey] || teamLookup[aliasKey];
-        if(standing){
-          const pos = standing.groupPos;
-          const pts = standing.points;
-          const posLabel = pos === 1 ? '1st' : pos === 2 ? '2nd' : pos === 3 ? '3rd' : '4th';
-          const grpName = standing.groupName.replace('GROUP_','').replace('GROUP ','');
-          if(pos === 4){
-            // 4th place — always eliminated
-            statusClass = 'eliminated';
-            statusText = `Out · Group stage (${posLabel})`;
-          } else {
-            // 1st, 2nd, 3rd — could still be in (best 3rd place qualifiers)
-            statusClass = 'still-in';
-            statusText = `Grp ${grpName} · ${posLabel} · ${pts}pts`;
-          }
-        } else {
-          statusText = 'Still in';
-          statusClass = 'still-in';
-        }
+        // Not in knockout data = still in
+        statusText = 'Still in';
+        statusClass = 'still-in';
       }
 
       html += `<div class="lb-team-row">
