@@ -1284,7 +1284,7 @@ function renderCountryTracker(){
           const grpName = standing.groupName.replace('GROUP_','').replace('GROUP ','');
           // 3rd and 4th place teams not in knockout data = eliminated in group stage
           // (only 8 best 3rd place teams qualified for R32)
-          if (pos >= 3) {
+          if (pos === 4) {
             statusClass = 'eliminated';
             statusText = `Out · Group stage (${posLabel})`;
           } else {
