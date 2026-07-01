@@ -1284,11 +1284,12 @@ function renderCountryTracker(){
           const grpName = standing.groupName.replace('GROUP_','').replace('GROUP ','');
           // 3rd and 4th place teams not in knockout data = eliminated in group stage
           // (only 8 best 3rd place teams qualified for R32)
-          if (pos === 4) {
+          // 3rd place qualifiers were from groups B, D, E, F, I, J, K, L
+          const thirdPlaceQualifiers = ['B','D','E','F','I','J','K','L'];
+          if (pos === 4 || (pos === 3 && !thirdPlaceQualifiers.includes(grpName))) {
             statusClass = 'eliminated';
             statusText = `Out · Group stage (${posLabel})`;
           } else {
-            // 1st/2nd not yet in knockout data = still in (haven't played R32 yet)
             statusClass = 'still-in';
             statusText = `Grp ${grpName} · ${posLabel} · ${pts}pts`;
           }
