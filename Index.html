@@ -1269,15 +1269,32 @@ function renderCountryTracker(){
         statusText = `✅ ${knockoutStatus.reached}`;
         statusClass = 'still-in';
       } else {
-        // Group stage — show position
+        // Check if knockouts have started — if any team has a knockout entry, we're past group stage
+        const knockoutStarted = Object.keys(knockout).length > 0;
         const standing = teamLookup[teamKey] || teamLookup[aliasKey];
         if(standing){
           const pos = standing.groupPos;
           const pts = standing.points;
           const gd = standing.goalDifference >= 0 ? '+'+standing.goalDifference : standing.goalDifference;
           const posLabel = pos === 1 ? '1st' : pos === 2 ? '2nd' : pos === 3 ? '3rd' : '4th';
-          statusText = `Grp ${standing.groupName.replace('GROUP_','').replace('GROUP ','')} · ${posLabel} · ${pts}pts · GD${gd}`;
-          statusClass = pos <= 2 ? 'still-in' : 'eliminated';
+          if(knockoutStarted){
+            // Knockouts underway — group position alone doesn't mean still in
+            // If no knockout entry exists for this team, they were eliminated in group stage
+            statusText = `Grp ${standing.groupName.replace('GROUP_','').replace('GROUP ','')} · ${posLabel} · ${pts}pts`;
+            statusClass = pos <= 2 ? 'still-in' : 'eliminated';
+            // But if knockouts started and team finished top 2 but has no knockout entry yet,
+            // they may still be playing — show as still in but with group info
+            if(knockoutStarted && pos > 2){
+              statusClass = 'eliminated';
+              statusText = `Out · Group stage (${posLabel})`;
+            } else if(knockoutStarted && pos <= 2){
+              statusClass = 'still-in';
+              statusText = `Grp ${standing.groupName.replace('GROUP_','').replace('GROUP ','')} · ${posLabel} · ${pts}pts`;
+            }
+          } else {
+            statusText = `Grp ${standing.groupName.replace('GROUP_','').replace('GROUP ','')} · ${posLabel} · ${pts}pts · GD${gd}`;
+            statusClass = pos <= 2 ? 'still-in' : 'eliminated';
+          }
         } else {
           statusText = 'Playing';
           statusClass = 'still-in';
