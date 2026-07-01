@@ -162,7 +162,7 @@
   .lb-team-name{flex:1;color:var(--silver);font-weight:500}
   .lb-team-status{font-size:10px;font-weight:600;letter-spacing:0.5px;white-space:nowrap}
   .lb-team-status.still-in{color:var(--s2)}
-  .lb-team-status.eliminated{color:var(--muted)}
+  .lb-team-status.eliminated{color:var(--danger)}
   .lb-team-status.winner{color:var(--gold)}
   .lb-team-status.runner-up{color:var(--silver)}
   .lb-group-pos{font-size:10px;color:var(--muted);min-width:24px;text-align:right}
@@ -526,7 +526,7 @@ const GB_TIERS = [
 ];
 
 // ── PARTICIPANTS ──────────────────────────────────────────────────────────────
-const DEFAULT_NAMES = ['Alistair','Cathy','Doug','Echo','Espresso','Izzy','John','Millie','Ollie','Patrick','Ryan','Thea'];
+const DEFAULT_NAMES = ['Alistair','Cathie','Doug','Echo','Espresso','Izzie','Jon','Millie','Ollie','Patrick','Ryan','Thea'];
 const CAT_NAMES = {
   'Echo': '🟤', // brown/red cat
   'Espresso': '⬛', // black cat
@@ -1204,6 +1204,7 @@ function renderCountryTracker(){
     'south korea': 'korea republic',
     'usa': 'united states',
     'dr congo': 'congo dr',
+    'kylian mbappe': 'kylian mbappé',
   };
   // Handle Ivory Coast separately due to apostrophe
   function getAlias(key){
@@ -1233,7 +1234,7 @@ function renderCountryTracker(){
 
   let html = '<div style="display:flex;gap:16px;margin-bottom:16px;flex-wrap:wrap">' +
     '<span style="font-size:11px;color:var(--s2);font-weight:600">● Qualified / Still in</span>' +
-    '<span style="font-size:11px;color:var(--muted);font-weight:600">● Bottom half / Eliminated</span>' +
+    '<span style="font-size:11px;color:var(--danger);font-weight:600">● Eliminated</span>' +
     '<span style="font-size:11px;color:var(--gold);font-weight:600">● Winner</span>' +
     '</div>' +
     '<div class="lb-player-grid">';
