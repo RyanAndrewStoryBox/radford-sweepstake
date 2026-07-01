@@ -1,6 +1,23 @@
 // ── update-standings.js ───────────────────────────────────────────────────────
 const COMPETITION_ID = 2000;
 
+// ── MANUAL KNOCKOUT OVERRIDES ─────────────────────────────────────────────────
+// Only add teams when they are ELIMINATED. Teams not listed here show as "Still in".
+// Stages: 'Round of 32', 'Round of 16', 'Quarter-Final', 'Semi-Final', 'Third Place', 'Final'
+const MANUAL_KNOCKOUT = {
+  // ELIMINATED IN ROUND OF 32
+  'South Africa':  { eliminatedAt: 'Round of 32' },
+  'Japan':         { eliminatedAt: 'Round of 32' },
+  'Germany':       { eliminatedAt: 'Round of 32' },
+  'Netherlands':   { eliminatedAt: 'Round of 32' },
+  "Côte d'Ivoire": { eliminatedAt: 'Round of 32' },
+  'Sweden':        { eliminatedAt: 'Round of 32' },
+  'Ecuador':       { eliminatedAt: 'Round of 32' },
+  'DR Congo':      { eliminatedAt: 'Round of 32' },
+  // ADD ELIMINATIONS HERE AS THEY HAPPEN e.g.:
+  // 'Brazil': { eliminatedAt: 'Round of 16' },
+};
+
 exports.handler = async function(event, context) {
   const CRON_SECRET = process.env.CRON_SECRET || 'radford-cron';
   const body = event.body ? JSON.parse(event.body) : {};
@@ -24,7 +41,6 @@ exports.handler = async function(event, context) {
   };
 
   try {
-    // Fetch standings
     const standingsRes = await fetch(
       `https://api.football-data.org/v4/competitions/${COMPETITION_ID}/standings`,
       { headers: apiHeaders }
@@ -35,7 +51,6 @@ exports.handler = async function(event, context) {
     }
     const standingsData = await standingsRes.json();
 
-    // Fetch scorers
     const scorersRes = await fetch(
       `https://api.football-data.org/v4/competitions/${COMPETITION_ID}/scorers?limit=50`,
       { headers: apiHeaders }
@@ -46,75 +61,13 @@ exports.handler = async function(event, context) {
     }
     const scorersData = await scorersRes.json();
 
-    // Fetch knockout matches by stage explicitly to avoid pagination issues
-    const knockoutStageIds = ['LAST_32', 'LAST_16', 'QUARTER_FINALS', 'SEMI_FINALS', 'THIRD_PLACE', 'FINAL'];
-    const stageLabels = {
-      'LAST_32':        'Round of 32',
-      'LAST_16':        'Round of 16',
-      'QUARTER_FINALS': 'Quarter-Final',
-      'SEMI_FINALS':    'Semi-Final',
-      'THIRD_PLACE':    'Third Place',
-      'FINAL':          'Final',
-    };
-    const stageOrder = ['LAST_32','LAST_16','QUARTER_FINALS','SEMI_FINALS','THIRD_PLACE','FINAL'];
-
-    // Fetch all knockout matches across all stages
-    const allKnockoutMatches = [];
-    for (const stage of knockoutStageIds) {
-      try {
-        const res = await fetch(
-          `https://api.football-data.org/v4/competitions/${COMPETITION_ID}/matches?stage=${stage}&status=FINISHED`,
-          { headers: apiHeaders }
-        );
-        if (res.ok) {
-          const d = await res.json();
-          if (d.matches) allKnockoutMatches.push(...d.matches);
-        }
-      } catch(e) {
-        console.log(`Failed to fetch stage ${stage}:`, e.message);
-      }
-    }
-
-    console.log('Total knockout matches fetched:', allKnockoutMatches.length);
-
-    // Sort by stage order so later rounds overwrite earlier ones
-    allKnockoutMatches.sort((a, b) => stageOrder.indexOf(a.stage) - stageOrder.indexOf(b.stage));
-
-    const knockoutProgress = {};
-    allKnockoutMatches.forEach(match => {
-      const stageLabel = stageLabels[match.stage];
-      if (!stageLabel) return;
-
-      const homeTeam = match.homeTeam.name;
-      const awayTeam = match.awayTeam.name;
-      const homeGoals = match.score.fullTime.home;
-      const awayGoals = match.score.fullTime.away;
-
-      let winner, loser;
-      if (homeGoals !== awayGoals) {
-        winner = homeGoals > awayGoals ? homeTeam : awayTeam;
-        loser  = homeGoals > awayGoals ? awayTeam : homeTeam;
-      } else {
-        const homePen = match.score.penalties?.home || 0;
-        const awayPen = match.score.penalties?.away || 0;
-        winner = homePen >= awayPen ? homeTeam : awayTeam;
-        loser  = homePen >= awayPen ? awayTeam : homeTeam;
-      }
-
-      knockoutProgress[loser]  = { eliminatedAt: stageLabel };
-      knockoutProgress[winner] = { reached: stageLabel };
-    });
-
-    console.log('Knockout progress entries:', Object.keys(knockoutProgress).length);
-    console.log(JSON.stringify(knockoutProgress));
-
     await fetch(`${SUPABASE_URL}/rest/v1/standings`, {
       method: 'POST', headers: sbHeaders,
       body: JSON.stringify({
         id: 'wc2026',
         data: {
           groups: standingsData.standings || [],
-          knockoutProgress,
+          knockoutProgress: MANUAL_KNOCKOUT,
           updatedAt: new Date().toISOString()
         }
       })
@@ -137,8 +90,7 @@ exports.handler = async function(event, context) {
         ok: true,
         groups: standingsData.standings?.length || 0,
         scorers: scorersData.scorers?.length || 0,
-        knockoutTeams: Object.keys(knockoutProgress).length,
-        knockoutProgress
+        knockoutTeams: Object.keys(MANUAL_KNOCKOUT).length
       })
     };
 
