@@ -1,10 +1,9 @@
 // ── update-standings.js ───────────────────────────────────────────────────────
-const COMPETITION_ID = 2000; // FIFA World Cup
+const COMPETITION_ID = 2000;
 
 exports.handler = async function(event, context) {
   const CRON_SECRET = process.env.CRON_SECRET || 'radford-cron';
   const body = event.body ? JSON.parse(event.body) : {};
-
   if (event.httpMethod === 'POST' && body.secret !== CRON_SECRET) {
     return { statusCode: 403, body: JSON.stringify({ error: 'Unauthorized' }) };
   }
@@ -12,7 +11,6 @@ exports.handler = async function(event, context) {
   const FOOTBALL_API_KEY = process.env.FOOTBALL_API_KEY;
   const SUPABASE_URL = process.env.SUPABASE_URL;
   const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
-
   if (!FOOTBALL_API_KEY || !SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
     return { statusCode: 500, body: JSON.stringify({ error: 'Missing env vars' }) };
   }
@@ -26,6 +24,7 @@ exports.handler = async function(event, context) {
   };
 
   try {
+    // Fetch standings
     const standingsRes = await fetch(
       `https://api.football-data.org/v4/competitions/${COMPETITION_ID}/standings`,
       { headers: apiHeaders }
@@ -36,6 +35,7 @@ exports.handler = async function(event, context) {
     }
     const standingsData = await standingsRes.json();
 
+    // Fetch scorers
     const scorersRes = await fetch(
       `https://api.football-data.org/v4/competitions/${COMPETITION_ID}/scorers?limit=50`,
       { headers: apiHeaders }
@@ -46,47 +46,45 @@ exports.handler = async function(event, context) {
     }
     const scorersData = await scorersRes.json();
 
-    const matchesRes = await fetch(
-      `https://api.football-data.org/v4/competitions/${COMPETITION_ID}/matches`,
-      { headers: apiHeaders }
-    );
-    const matchesData = matchesRes.ok ? await matchesRes.json() : { matches: [] };
-
-    const seenStages = [...new Set((matchesData.matches || []).map(m => m.stage))];
-
-    // Stage order — higher index = further in tournament
-    const stageOrder = [
-      'LAST_32', 'ROUND_OF_32',
-      'LAST_16', 'ROUND_OF_16',
-      'QUARTER_FINALS', 'QUARTER_FINAL',
-      'SEMI_FINALS', 'SEMI_FINAL',
-      'THIRD_PLACE', 'THIRD_PLACE_MATCH',
-      'FINAL'
-    ];
-
+    // Fetch knockout matches by stage explicitly to avoid pagination issues
+    const knockoutStageIds = ['LAST_32', 'LAST_16', 'QUARTER_FINALS', 'SEMI_FINALS', 'THIRD_PLACE', 'FINAL'];
     const stageLabels = {
-      'LAST_32':           'Round of 32',
-      'ROUND_OF_32':       'Round of 32',
-      'LAST_16':           'Round of 16',
-      'ROUND_OF_16':       'Round of 16',
-      'QUARTER_FINALS':    'Quarter-Final',
-      'QUARTER_FINAL':     'Quarter-Final',
-      'SEMI_FINALS':       'Semi-Final',
-      'SEMI_FINAL':        'Semi-Final',
-      'THIRD_PLACE':       'Third Place',
-      'THIRD_PLACE_MATCH': 'Third Place',
-      'FINAL':             'Final',
+      'LAST_32':        'Round of 32',
+      'LAST_16':        'Round of 16',
+      'QUARTER_FINALS': 'Quarter-Final',
+      'SEMI_FINALS':    'Semi-Final',
+      'THIRD_PLACE':    'Third Place',
+      'FINAL':          'Final',
     };
+    const stageOrder = ['LAST_32','LAST_16','QUARTER_FINALS','SEMI_FINALS','THIRD_PLACE','FINAL'];
+
+    // Fetch all knockout matches across all stages
+    const allKnockoutMatches = [];
+    for (const stage of knockoutStageIds) {
+      try {
+        const res = await fetch(
+          `https://api.football-data.org/v4/competitions/${COMPETITION_ID}/matches?stage=${stage}&status=FINISHED`,
+          { headers: apiHeaders }
+        );
+        if (res.ok) {
+          const d = await res.json();
+          if (d.matches) allKnockoutMatches.push(...d.matches);
+        }
+      } catch(e) {
+        console.log(`Failed to fetch stage ${stage}:`, e.message);
+      }
+    }
+
+    console.log('Total knockout matches fetched:', allKnockoutMatches.length);
+
+    // Sort by stage order so later rounds overwrite earlier ones
+    allKnockoutMatches.sort((a, b) => stageOrder.indexOf(a.stage) - stageOrder.indexOf(b.stage));
 
     const knockoutProgress = {};
-
-    // Process matches in stage order so later rounds always overwrite earlier ones
-    const finishedKnockout = (matchesData.matches || [])
-      .filter(m => stageLabels[m.stage] && m.status === 'FINISHED')
-      .sort((a, b) => stageOrder.indexOf(a.stage) - stageOrder.indexOf(b.stage));
-
-    finishedKnockout.forEach(match => {
+    allKnockoutMatches.forEach(match => {
       const stageLabel = stageLabels[match.stage];
+      if (!stageLabel) return;
+
       const homeTeam = match.homeTeam.name;
       const awayTeam = match.awayTeam.name;
       const homeGoals = match.score.fullTime.home;
@@ -103,13 +101,12 @@ exports.handler = async function(event, context) {
         loser  = homePen >= awayPen ? awayTeam : homeTeam;
       }
 
-      // Always overwrite — processing in order means later rounds win
       knockoutProgress[loser]  = { eliminatedAt: stageLabel };
       knockoutProgress[winner] = { reached: stageLabel };
     });
 
-    console.log('Stages seen:', seenStages);
-    console.log('Knockout progress:', JSON.stringify(knockoutProgress));
+    console.log('Knockout progress entries:', Object.keys(knockoutProgress).length);
+    console.log(JSON.stringify(knockoutProgress));
 
     await fetch(`${SUPABASE_URL}/rest/v1/standings`, {
       method: 'POST', headers: sbHeaders,
@@ -118,7 +115,6 @@ exports.handler = async function(event, context) {
         data: {
           groups: standingsData.standings || [],
           knockoutProgress,
-          seenStages,
           updatedAt: new Date().toISOString()
         }
       })
@@ -142,7 +138,7 @@ exports.handler = async function(event, context) {
         groups: standingsData.standings?.length || 0,
         scorers: scorersData.scorers?.length || 0,
         knockoutTeams: Object.keys(knockoutProgress).length,
-        seenStages
+        knockoutProgress
       })
     };
 
